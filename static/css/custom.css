@@ -1,0 +1,25 @@
+html, body {
+    width: 100vw;
+    height: 100vh;
+}
+
+ul,li{
+    list-style-type: none;
+}
+#add {
+    vertical-align: top;
+}
+
+.container {
+    background-color: #C2D6FF;
+    height: 100vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+
+}
+
+@media (min-width: 550px) {
+	#homeButton {
+		padding-top: 1vh;
+	}
+}

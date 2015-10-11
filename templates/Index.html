@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- Basic Page Needs
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<meta charset="utf-8">
+<title>Master Thesis</title>
+<meta name="description" content="Thesis by Ivo de Liefde at Geomatics TU Delft."> <meta name="author" content="Ivo de Liefde">
+
+<!-- Mobile Specific Metas
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- FONT
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/fonts.css') }}">
+
+<!-- CSS
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+
+
+
+</head>
+<body>
+<!-- ========= -->
+<!-- Your HTML -->
+<!-- ========= -->
+<!-- Primary Page Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<div id="page_1" class="container" style='padding-top:2vh;'>
+    <div class='row'>
+        <div class='one columns'>
+            Logo
+        </div>
+        <div class='eleven columns'>
+            <select id="menu" class="u-full-width">
+                <option value="#page_1">Home</option>
+                <option value="#page_2">Page 2</option>
+                <option value="#page_3">Page 3</option>
+                <option value="#page_4">Page 4</option>
+                <!-- <option value="#page_5">Contact</option> -->
+            </select>
+        </div>
+    </div>
+    <div class='row' >
+        <div class='twelve columns'>
+            <h1>Main Title </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="six columns">
+            Text
+        </div>
+        <div class="six columns">
+            image
+        </div>
+    </div>
+</div>
+
+<div id="page_2" class="container">
+    <div class='row' >
+        <div class='ten columns'>
+            <h1>Page 2</h1>
+        </div>
+        <div class='two columns' id="homeButton">
+            <button id="goHome" class='u-pull-right'>Home</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="six columns">
+            Text
+        </div>
+        <div class="six columns">
+            image
+        </div>
+    </div>
+</div>
+<div id="page_3" class="container">
+    <div class='row'>
+        <div class='ten columns'>
+            <h1>Page 3</h1>
+        </div>
+        <div class='two columns' id="homeButton">
+            <button id="goHome" class='u-pull-right'>Home</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="six columns">
+            Text
+        </div>
+        <div class="six columns">
+            image
+        </div>
+    </div>
+</div>
+<div id="page_4" class="container">
+    <div class='row'>
+        <div class='ten columns'>
+            <h1>Page 4</h1>
+        </div>
+        <div class='two columns' id="homeButton">
+            <button id="goHome" class='u-pull-right'>Home</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="six columns">
+            Text
+        </div>
+        <div class="six columns">
+            image
+        </div>
+    </div>
+</div>
+  <!-- <div id="page_5" class="container">
+      <div class='row'>
+          <div class='ten columns'>
+            <h1>Contact</h1>
+          </div>
+          <div class='two columns' id="homeButton">
+              <button id="goHome">Home</button>
+          </div>
+      </div>
+      <form>
+      <div class="row">
+        <div class="four columns">
+          <label for="exampleEmailInput">Your email</label>
+          <input class="u-full-width" type="email" placeholder="test@mailbox.com" id="emailInput">
+        </div>
+        <div class="eight columns">
+          <label for="exampleRecipientInput">Title</label>
+          <input class="u-full-width" type="text" placeholder="Reasons and topics" id="titleInput">
+        </div>
+      </div>
+      <label for="exampleMessage">Message</label>
+      <textarea class="u-full-width" placeholder="Hi ..." id="messageInput"></textarea>
+      <label class="example-send-yourself-copy">
+        <input type="checkbox">
+        <span class="label-body">Send a copy to yourself</span>
+      </label>
+      <input class="button-primary" type="submit" value="Submit">
+  </form>
+</div> -->
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.scrollTo-1.4.3.1-min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/json2.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/underscore.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/backbone-min.js') }}"></script>
+
+
+<script>
+    (function($){
+        window.ListView = Backbone.View.extend({
+            el: $('body'), // el attaches to existing element
+            events: {
+              "change input.content":  "contentChanged",
+              'click button#add': 'addItem',
+              'change select#menu' : 'goTo',
+              'click button#goHome' : 'goHome'
+            },
+            initialize: function() {
+                console.log("start app");
+            },
+            goTo: function(){
+                this.input = this.$('#menu');
+                $.scrollTo(this.input.val(), { duration:800 });
+            },
+            goHome: function(){
+                $.scrollTo('#page_1', { duration:800 });
+                $('#menu').val('#page_1');
+            }
+        });
+
+    var listView = new ListView();
+    })(jQuery);
+</script>
+
+</body>
+</html>
