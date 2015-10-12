@@ -7,5 +7,5 @@ app = Flask(__name__)
 def start():
  	return render_template('Index.html')
 
-if __name__ == '__main__':
-  	app.run()
+# if __name__ == '__main__':
+#   	app.run()
