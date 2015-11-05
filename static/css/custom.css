@@ -1,25 +1,110 @@
 html, body {
     max-width: 100vw;
     height: 100vh;
+    padding: 0;
+    margin: 0;
+    /*background-color: #C2D6FF;*/
 }
 
-ul,li{
-    list-style-type: none;
+#menuHeader, .header {
+    margin-left: -1vw;
+    margin-right: -1vw;
+    padding: 1vh;
+    padding-bottom: 0;
 }
+
+#menuContainer, .goHome {
+    visibility: hidden;
+    color: black;
+}
+
+#menu {
+    border: none;
+    background-color: #F6F9FB;
+    /*max-width: 20vw;*/
+}
+
+h5 {
+    background-color: #C2D6FF;
+    color: black;
+    padding: 0.5vw;
+
+}
+
+.goHome {
+    color: white;
+}
+
+button {
+    width: 100%;
+}
+
 #add {
     vertical-align: top;
 }
 
 .container {
-    background-color: #C2D6FF;
-    height: 100vh;
+    background-color: #2F485D;
+    color: white;
+    min-height: 100vh;
     padding-left: 1vw;
     padding-right: 1vw;
+}
 
+img {
+    width: 50%; 
+    border-radius: 0.2em;
+}
+
+.content {
+    border-top: solid #C2D6FF;
+    padding: 1vw; 
+    border-radius: 0.2em;
+}
+
+a, a:hover {
+    color: white;
+    text-decoration: none;
 }
 
 @media (min-width: 550px) {
 	#homeButton {
 		padding-top: 1vh;
 	}
+
+    img {
+        width: 100%; 
+    }
+
+    h5 {
+        max-width: 30vw;
+    }
+
+    #menu {
+        margin-top: 1vh;
+    }
+
 }
+
+@media (max-width: 1000px) {
+    .container{
+        padding-left: 2vw;
+        padding-right: 2vw;
+    }
+
+    #menu, .goHome, .homeButton {
+        background-color: black;
+        visibility: hidden;
+        position: fixed;
+        padding: 0;
+        margin: 0;
+        height: 0px;
+    }
+
+    h5 {
+        max-width: 100vw;
+    }
+
+}
+
+

@@ -5,7 +5,7 @@
 <!-- Basic Page Needs
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <meta charset="utf-8">
-<title>Test</title>
+<title>Title</title>
 <meta name="description" content="Thesis by Ivo de Liefde at Geomatics TU Delft."> <meta name="author" content="Ivo de Liefde">
 
 <!-- Mobile Specific Metas
@@ -27,68 +27,65 @@
 </head>
 <body>
 <!-- ========= -->
-<!-- Your HTML -->
+<!--   HTML    -->
 <!-- ========= -->
 <!-- Primary Page Layout
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<div id="page_1" class="container" style='padding-top:2vh;'>
-    <div class='row'>
-        <div class='one columns'>
-            Logo
+<div id="page_1" class="container">
+    <div class='row' style="padding-top: 1vh;">
+        <div class='eight columns'>
+            <h1>Title</h1>
         </div>
-        <div class='eleven columns'>
+        <div id="menuContainer" class='four columns'>
             <select id="menu" class="u-full-width">
                 <option value="#page_1">Home</option>
-                <option value="#page_2">Page 2</option>
-                <option value="#page_3">Page 3</option>
-                <option value="#page_4">Page 4</option>
-                <!-- <option value="#page_5">Contact</option> -->
+                <option value="#page_2">Page 1</option>
+                <option value="#page_3">Page 2</option>
+                <option value="#page_4">Page 3</option>
+                <option value="#page_5">Contact</option>
             </select>
         </div>
     </div>
-    <div class='row' >
-        <div class='twelve columns'>
-            <h1>Main Title </h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="six columns">
-            Text
-        </div>
-        <div class="six columns">
-            image
+    <div class="row content">
+        <div class="twelve columns">
+            <!-- <h5>Master Thesis by Ivo de Liefde</h5>
+            Linked data is creating a knowledge base on the web that is understandable for both humans as machines. As sensor get increasingly cheaper more and more sensor data is being produced. Linking sensor data into the semantic 
+            web allows for the fusion of data: integrating, combining and aggregating data from different sources. To do so the metadata of all the available sensors should be linked to the semantic definition of the real world objects they're measuring: a street, a neighbourhood, a city, etc.. This way you can get sensor information by simply querying things like: <em>"give me all temperature data of the last 10 minutes from sensors located in Delft"</em>.
+        -->
+        Text
         </div>
     </div>
 </div>
 
 <div id="page_2" class="container">
-    <div class='row' >
+    <div class='row header'>
         <div class='ten columns'>
-            <h1>Page 2</h1>
+            <h1>Page 1</h1>
         </div>
         <div class='two columns' id="homeButton">
-            <button id="goHome" class='u-pull-right'>Home</button>
+            <button class='u-pull-right goHome'>Home</button>
         </div>
     </div>
-    <div class="row">
+    <div class="row content">
         <div class="six columns">
             Text
         </div>
         <div class="six columns">
             image
+            <!-- <img src="{{ url_for('static', filename='img/smartcity.png') }}" /> -->
         </div>
     </div>
 </div>
 <div id="page_3" class="container">
-    <div class='row'>
+    <div class='row header'>
         <div class='ten columns'>
-            <h1>Page 3</h1>
+            <h1>Page 2</h1>
         </div>
         <div class='two columns' id="homeButton">
-            <button id="goHome" class='u-pull-right'>Home</button>
+            <button class='u-pull-right goHome'>Home</button>
         </div>
     </div>
-    <div class="row">
+    <div class="row content">
         <div class="six columns">
             Text
         </div>
@@ -98,69 +95,70 @@
     </div>
 </div>
 <div id="page_4" class="container">
-    <div class='row'>
+    <div class='row header'>
         <div class='ten columns'>
-            <h1>Page 4</h1>
+            <h1>Page 3</h1>
         </div>
         <div class='two columns' id="homeButton">
-            <button id="goHome" class='u-pull-right'>Home</button>
+            <button class='u-pull-right goHome'>Home</button>
         </div>
     </div>
-    <div class="row">
+    <div class="row content">
         <div class="six columns">
             Text
         </div>
         <div class="six columns">
             image
+            <!-- <img src="{{ url_for('static', filename='img/linkeddata.png') }}"> -->
         </div>
     </div>
 </div>
-  <!-- <div id="page_5" class="container">
-      <div class='row'>
-          <div class='ten columns'>
+<div id="page_5" class="container">
+    <div class='row'>
+        <div class='ten columns'>
             <h1>Contact</h1>
-          </div>
-          <div class='two columns' id="homeButton">
-              <button id="goHome">Home</button>
-          </div>
-      </div>
-      <form>
-      <div class="row">
-        <div class="four columns">
-          <label for="exampleEmailInput">Your email</label>
-          <input class="u-full-width" type="email" placeholder="test@mailbox.com" id="emailInput">
         </div>
-        <div class="eight columns">
-          <label for="exampleRecipientInput">Title</label>
-          <input class="u-full-width" type="text" placeholder="Reasons and topics" id="titleInput">
+        <div class='two columns' id="homeButton">
+            <button class='u-pull-right goHome'>Home</button>
         </div>
-      </div>
-      <label for="exampleMessage">Message</label>
-      <textarea class="u-full-width" placeholder="Hi ..." id="messageInput"></textarea>
-      <label class="example-send-yourself-copy">
-        <input type="checkbox">
-        <span class="label-body">Send a copy to yourself</span>
-      </label>
-      <input class="button-primary" type="submit" value="Submit">
-  </form>
-</div> -->
+    </div>
+    <div class="row content">
+        <div class="two columns">
+            <img src="{{ url_for('static', filename='img/ivo.png') }}">
+        </div>
+        <a href="https://nl.linkedin.com/pub/ivo-de-liefde/29/609/282" target="_blank" class="ten columns">
+            <div style="padding-top:1vh">
+                <h5> Ivo de Liefde</h5>
+                <ul>
+                    <li>Student MSC. Geomatics for the Built Environment</li>
+                    <li>BSc. Human Geography and Urban Planning</li>
+                    <li>Email: i.deliefde@student.tudelft.nl</li>
+                </ul>
+            </div>
+        </a>
+    </div>
+</div>
 
+<!-- Javascript dependencies
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.scrollTo-1.4.3.1-min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/json2.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/underscore.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/backbone-min.js') }}"></script>
 
-
+<!-- ========== -->
+<!-- Javascript -->
+<!-- ========== -->
+<!-- Backbone framework
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <script>
     (function($){
         window.ListView = Backbone.View.extend({
-            el: $('body'), // el attaches to existing element
+            el: $('body'), 
             events: {
-              "change input.content":  "contentChanged",
-              'click button#add': 'addItem',
               'change select#menu' : 'goTo',
-              'click button#goHome' : 'goHome'
+              'click button.goHome' : 'goHome'
             },
             initialize: function() {
                 console.log("start app");
@@ -177,6 +175,13 @@
 
     var listView = new ListView();
     })(jQuery);
+
+    window.onload = function() {
+        if (screen.width > 1000){
+            $('#menuContainer').css('visibility','visible');
+            $('.goHome').css('visibility','visible');
+        }
+    }
 </script>
 
 </body>
