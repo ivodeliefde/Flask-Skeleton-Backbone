@@ -60,10 +60,6 @@ button {
     padding-right: 1vw;
 }
 
-#profilePhoto {
-    width: 50%; 
-}
-
 .content {
     border-top: solid #C2D6FF;
     padding: 1vw; 
@@ -79,6 +75,10 @@ img {
     min-width: 100%; 
     max-width: 100%; 
     border-radius: 0.2em;
+}
+
+#profilePhoto {
+    width: 50%; 
 }
 
 @media (min-width: 550px) {
@@ -114,6 +114,8 @@ img {
     h5 {
         max-width: 100vw;
     }
+
+
 
 }
 
