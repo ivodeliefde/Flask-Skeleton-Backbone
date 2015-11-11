@@ -33,26 +33,28 @@
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <div id="page_1" class="container">
     <div class='row' style="padding-top: 1vh;">
-        <div class='eight columns'>
-            <h1>Title</h1>
+        <div class='nine columns'>
+            <h1>Aggregation of Semantic Sensor Data</h1>
         </div>
-        <div id="menuContainer" class='four columns'>
+        <div id="menuContainer" class='three columns'>
             <select id="menu" class="u-full-width">
                 <option value="#page_1">Home</option>
-                <option value="#page_2">Page 1</option>
-                <option value="#page_3">Page 2</option>
-                <option value="#page_4">Page 3</option>
+                <option value="#page_2">Objectives</option>
+                <option value="#page_3">Methods</option>
+                <option value="#page_4">Results</option>
                 <option value="#page_5">Contact</option>
             </select>
         </div>
     </div>
     <div class="row content">
         <div class="twelve columns">
-            <!-- <h5>Master Thesis by Ivo de Liefde</h5>
-            Linked data is creating a knowledge base on the web that is understandable for both humans as machines. As sensor get increasingly cheaper more and more sensor data is being produced. Linking sensor data into the semantic 
-            web allows for the fusion of data: integrating, combining and aggregating data from different sources. To do so the metadata of all the available sensors should be linked to the semantic definition of the real world objects they're measuring: a street, a neighbourhood, a city, etc.. This way you can get sensor information by simply querying things like: <em>"give me all temperature data of the last 10 minutes from sensors located in Delft"</em>.
-        -->
-        Text
+            <h5>Master Thesis by Ivo de Liefde</h5>
+            As sensors get increasingly cheaper more and more sensor data is being produced. Research on smart cities has shown numerous potential applications for using sensor data to create smarter cities with a better quality of life. However, to make the most out of the smart city it should be possible to easily retrieve aggregated sensor data from heterogeneous sources. Also there should be a central place in the internet to discover sensor data. <br><br>
+            This thesis aims to create such a central place in the internet by developing a method to automatically link sensor metadata to OpenStreetMap. This allows for the fusion of sensor data: integrating, combining and aggregating data from different sources. To do so the metadata of all the available sensors should be linked to the semantic definition of the real world objects they're measuring: a street, a neighbourhood, a city, etc.. This way you can get sensor information by simply querying things like: <em>"select all temperature data of the last two days from sensors located in a specific city aggregated per hour"</em>.
+            <br>
+            <br>
+            <img src="{{ url_for('static', filename='img/frankfurt.jpg') }}">
+            <div class="caption">By <a href="https://www.flickr.com/photos/cfaobam/" target="__blank">Carsten Frenzl</a></div>
         </div>
     </div>
 </div>
@@ -60,17 +62,17 @@
 <div id="page_2" class="container">
     <div class='row header'>
         <div class='ten columns'>
-            <h1>Page 1</h1>
+            <h1>Objectives</h1>
         </div>
         <div class='two columns' id="homeButton">
             <button class='u-pull-right goHome'>Home</button>
         </div>
     </div>
     <div class="row content">
-        <div class="six columns">
+        <div class="eight columns">
             Text
         </div>
-        <div class="six columns">
+        <div class="four columns">
             image
             <!-- <img src="{{ url_for('static', filename='img/smartcity.png') }}" /> -->
         </div>
@@ -79,17 +81,17 @@
 <div id="page_3" class="container">
     <div class='row header'>
         <div class='ten columns'>
-            <h1>Page 2</h1>
+            <h1>Methods</h1>
         </div>
         <div class='two columns' id="homeButton">
             <button class='u-pull-right goHome'>Home</button>
         </div>
     </div>
     <div class="row content">
-        <div class="six columns">
+        <div class="eight columns">
             Text
         </div>
-        <div class="six columns">
+        <div class="four columns">
             image
         </div>
     </div>
@@ -97,17 +99,17 @@
 <div id="page_4" class="container">
     <div class='row header'>
         <div class='ten columns'>
-            <h1>Page 3</h1>
+            <h1>Results</h1>
         </div>
         <div class='two columns' id="homeButton">
             <button class='u-pull-right goHome'>Home</button>
         </div>
     </div>
     <div class="row content">
-        <div class="six columns">
+        <div class="eight columns">
             Text
         </div>
-        <div class="six columns">
+        <div class="four columns">
             image
             <!-- <img src="{{ url_for('static', filename='img/linkeddata.png') }}"> -->
         </div>
@@ -124,7 +126,7 @@
     </div>
     <div class="row content">
         <div class="two columns">
-            <img src="{{ url_for('static', filename='img/ivo.png') }}">
+            <img src="{{ url_for('static', filename='img/ivo.png') }}" id="profilePhoto">
         </div>
         <a href="https://nl.linkedin.com/pub/ivo-de-liefde/29/609/282" target="_blank" class="ten columns">
             <div style="padding-top:1vh">

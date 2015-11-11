@@ -25,10 +25,19 @@ html, body {
 }
 
 h5 {
-    background-color: #C2D6FF;
-    color: black;
+    /*background-color: #C2D6FF;*/
+    color: #222222;
     padding: 0.5vw;
+    font-weight: bold;
+}
 
+.caption {
+    font-size: 90%;
+    color: #222222;
+}
+
+.caption a {
+    color: #222222;
 }
 
 .goHome {
@@ -51,9 +60,8 @@ button {
     padding-right: 1vw;
 }
 
-img {
+#profilePhoto {
     width: 50%; 
-    border-radius: 0.2em;
 }
 
 .content {
@@ -67,18 +75,19 @@ a, a:hover {
     text-decoration: none;
 }
 
+img {
+    width: 100%; 
+    border-radius: 0.2em;
+}
+
 @media (min-width: 550px) {
 	#homeButton {
 		padding-top: 1vh;
 	}
 
-    img {
-        width: 100%; 
-    }
-
-    h5 {
+    /*h5 {
         max-width: 30vw;
-    }
+    }*/
 
     #menu {
         margin-top: 1vh;
