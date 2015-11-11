@@ -77,10 +77,6 @@ img {
     border-radius: 0.2em;
 }
 
-#profilePhoto {
-    width: 50%; 
-}
-
 @media (min-width: 550px) {
 	#homeButton {
 		padding-top: 1vh;
@@ -100,6 +96,10 @@ img {
     .container{
         padding-left: 2vw;
         padding-right: 2vw;
+    }
+
+    #profilePhoto {
+        width: 50%; 
     }
 
     #menu, .goHome, .homeButton {
