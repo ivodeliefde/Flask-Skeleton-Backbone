@@ -80,6 +80,10 @@ button {
 
 }
 
+#map {
+    height: 50vh;
+}
+
 a, a:hover {
     color: #212121;
     text-decoration: none;

@@ -21,8 +21,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+<link href='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.css' rel='stylesheet' />
 
-
+<!-- Javascript
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script>
 
 </head>
 <body>
@@ -49,10 +52,9 @@
         <div id="menuContainer" class='three columns'>
             <select id="menu" class="u-full-width">
                 <option value="#page_1">Home</option>
-                <option value="#page_2">Objectives</option>
+                <option value="#page_2">Implementation</option>
                 <option value="#page_3">Methods</option>
-                <option value="#page_4">Results</option>
-                <option value="#page_5">Contact</option>
+                <option value="#page_4">Contact</option>
             </select>
         </div>
     </div>
@@ -63,8 +65,7 @@
             This thesis aims to create such a central place in the internet by developing a method to automatically link sensor metadata to OpenStreetMap. This allows for the fusion of sensor data: integrating, combining and aggregating data from different sources. To do so the metadata of all the available sensors should be linked to the semantic definition of the real world objects they're measuring: a street, a neighbourhood, a city, etc.. This way you can get sensor information by simply querying things like: <em>"select all temperature data of the last two days from sensors located in a specific city aggregated per hour"</em>.
             <br>
             <br>
-            <!-- <img src="{{ url_for('static', filename='img/frankfurt.jpg') }}">
-            <div class="caption">By <a href="https://www.flickr.com/photos/cfaobam/" target="__blank">Carsten Frenzl</a></div> -->
+
         </div>
     </div>
 </div>
@@ -72,19 +73,14 @@
 <div id="page_2" class="container">
     <div class='row header'>
         <div class='ten columns'>
-            <h1>Objectives</h1>
+            <h1>Implementation</h1>
         </div>
         <div class='two columns' id="homeButton">
             <button class='u-pull-right goHome'>Home</button>
         </div>
     </div>
     <div class="row content">
-        <div class="eight columns">
-            Text
-        </div>
-        <div class="four columns">
-            image
-            <!-- <img src="{{ url_for('static', filename='img/smartcity.png') }}" /> -->
+        <div id="map" class="twelve columns">
         </div>
     </div>
 </div>
@@ -107,25 +103,6 @@
     </div>
 </div>
 <div id="page_4" class="container">
-    <div class='row header'>
-        <div class='ten columns'>
-            <h1>Results</h1>
-        </div>
-        <div class='two columns' id="homeButton">
-            <button class='u-pull-right goHome'>Home</button>
-        </div>
-    </div>
-    <div class="row content">
-        <div class="eight columns">
-            Text
-        </div>
-        <div class="four columns">
-            image
-            <!-- <img src="{{ url_for('static', filename='img/linkeddata.png') }}"> -->
-        </div>
-    </div>
-</div>
-<div id="page_5" class="container">
     <div class='row header'>
         <div class='ten columns'>
             <h1>Contact</h1>
@@ -153,11 +130,15 @@
 
 <!-- Javascript dependencies
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<script src='https://code.jquery.com/jquery-1.11.0.min.js'></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.scrollTo-1.4.3.1-min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/json2.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/underscore.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/backbone-min.js') }}"></script>
+
+
 
 <!-- ========== -->
 <!-- Javascript -->
@@ -192,7 +173,19 @@
         if (screen.width > 1000){
             $('#menuContainer').css('visibility','visible');
             $('.goHome').css('visibility','visible');
+
         }
+        L.mapbox.accessToken = 'pk.eyJ1IjoiaXZvMTEyMzUiLCJhIjoieV82bFVfNCJ9.G8mrfJOA07edDDj6Bep2bQ';
+        var map = L.mapbox.map('map', 'mapbox.satellite').setView([51.686068, 5.198107], 7);
+        var NLprov = omnivore.kml('{{ url_for('static', filename='geo/provNL.kml') }}')
+            .addTo(map);
+        var BEprov = omnivore.kml('{{ url_for('static', filename='geo/provBE.kml') }}')
+            .addTo(map);
+
+        map.on('mousedown', function(e) {
+            console.log(e.latlng.toString());
+        });
+
     }
 </script>
 
