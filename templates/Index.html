@@ -5,7 +5,7 @@
 <!-- Basic Page Needs
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <meta charset="utf-8">
-<title>Title</title>
+<title>Thesis</title>
 <meta name="description" content="Thesis by Ivo de Liefde at Geomatics TU Delft."> <meta name="author" content="Ivo de Liefde">
 
 <!-- Mobile Specific Metas
@@ -42,9 +42,9 @@
 <!-- Primary Page Layout
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <div id="page_1" class="container">
-    <div class='row' style="padding-top: 1vh;">
+    <div class='row header' style="padding-top: 1vh;">
         <div class='nine columns'>
-            <h1>Aggregation of Semantic Sensor Data</h1>
+            <h1>Discovery, Integration and Aggregation of Sensor Data Using the Semantic Web</h1>
         </div>
         <div id="menuContainer" class='three columns'>
             <select id="menu" class="u-full-width">
@@ -63,8 +63,8 @@
             This thesis aims to create such a central place in the internet by developing a method to automatically link sensor metadata to OpenStreetMap. This allows for the fusion of sensor data: integrating, combining and aggregating data from different sources. To do so the metadata of all the available sensors should be linked to the semantic definition of the real world objects they're measuring: a street, a neighbourhood, a city, etc.. This way you can get sensor information by simply querying things like: <em>"select all temperature data of the last two days from sensors located in a specific city aggregated per hour"</em>.
             <br>
             <br>
-            <img src="{{ url_for('static', filename='img/frankfurt.jpg') }}">
-            <div class="caption">By <a href="https://www.flickr.com/photos/cfaobam/" target="__blank">Carsten Frenzl</a></div>
+            <!-- <img src="{{ url_for('static', filename='img/frankfurt.jpg') }}">
+            <div class="caption">By <a href="https://www.flickr.com/photos/cfaobam/" target="__blank">Carsten Frenzl</a></div> -->
         </div>
     </div>
 </div>
@@ -126,7 +126,7 @@
     </div>
 </div>
 <div id="page_5" class="container">
-    <div class='row'>
+    <div class='row header'>
         <div class='ten columns'>
             <h1>Contact</h1>
         </div>
@@ -135,19 +135,19 @@
         </div>
     </div>
     <div class="row content">
-        <div class="two columns">
+        <div class="four columns">
             <img src="{{ url_for('static', filename='img/Ivo.jpg') }}" id="profilePhoto">
         </div>
-        <a href="https://nl.linkedin.com/pub/ivo-de-liefde/29/609/282" target="_blank" class="ten columns">
-            <div style="padding-top:1vh">
-                <h5> Ivo de Liefde</h5>
-                <ul>
-                    <li>Student MSC. Geomatics for the Built Environment</li>
-                    <li>BSc. Human Geography and Urban Planning</li>
-                    <li>Email: i.deliefde@student.tudelft.nl</li>
-                </ul>
-            </div>
-        </a>
+
+        <div class="eight columns" style="padding-top:1vh">
+            <h5> Ivo de Liefde</h5>
+            <ul>
+                <li>Student MSC. Geomatics for the Built Environment</li>
+                <li>BSc. Human Geography and Urban Planning</li>
+                <li>Email: i.deliefde@student.tudelft.nl</li>
+            </ul>
+        </div>
+
     </div>
 </div>
 
@@ -167,7 +167,7 @@
 <script>
     (function($){
         window.ListView = Backbone.View.extend({
-            el: $('body'), 
+            el: $('body'),
             events: {
               'change select#menu' : 'goTo',
               'click button.goHome' : 'goHome'

@@ -3,14 +3,19 @@ html, body {
     height: 100vh;
     padding: 0;
     margin: 0;
-    /*background-color: #C2D6FF;*/
+    color: white;
+    /*background-color: #e3e3e3;*/
 }
 
 #menuHeader, .header {
-    margin-left: -1vw;
-    margin-right: -1vw;
+    /*margin-left: -1vw;
+    margin-right: -1vw;*/
     padding: 1vh;
     padding-bottom: 0;
+    /*background-color: #1967D2;*/
+    background-color: white;
+    /*border-left: solid #212121;*/
+
 }
 
 #menuContainer, .goHome {
@@ -20,29 +25,35 @@ html, body {
 
 #menu {
     border: none;
-    background-color: #F6F9FB;
+    background-color: #e9ece5;
     /*max-width: 20vw;*/
+}
+
+
+
+h1 {
+    color: black;
 }
 
 h5 {
     /*background-color: #C2D6FF;*/
-    color: #222222;
+    /*color: #222222;*/
     padding: 0.5vw;
     font-weight: bold;
 }
 
-.caption {
+/*.caption {
     font-size: 90%;
     color: #222222;
 }
 
 .caption a {
     color: #222222;
-}
+}*/
 
-.goHome {
-    color: white;
-}
+/*.goHome {
+    color: #e9ece5;
+}*/
 
 button {
     width: 100%;
@@ -53,29 +64,37 @@ button {
 }
 
 .container {
-    background-color: #2F485D;
-    color: white;
+    /*background-color: white;*/
+
     min-height: 100vh;
-    padding-left: 1vw;
-    padding-right: 1vw;
+    /*padding-left: 1vw;
+    padding-right: 1vw;*/
+    border-right: solid #e9ece5;
 }
 
 .content {
-    border-top: solid #C2D6FF;
-    padding: 1vw; 
-    border-radius: 0.2em;
+
+    padding: 1vw;
+    /*border-radius: 0.2em;*/
+    background-color: #2196F3;
+
 }
 
 a, a:hover {
-    color: white;
+    color: #212121;
     text-decoration: none;
 }
 
 img {
-    min-width: 100%; 
-    max-width: 100%; 
+    min-width: 100%;
+    max-width: 100%;
     border-radius: 0.2em;
 }
+
+#profilePhoto {
+    width: 50%;
+}
+
 
 @media (min-width: 550px) {
 	#homeButton {
@@ -98,12 +117,9 @@ img {
         padding-right: 2vw;
     }
 
-    #profilePhoto {
-        width: 50%; 
-    }
 
     #menu, .goHome, .homeButton {
-        background-color: black;
+        /*background-color: black;*/
         visibility: hidden;
         position: fixed;
         padding: 0;
@@ -118,5 +134,3 @@ img {
 
 
 }
-
-
