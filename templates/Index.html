@@ -176,7 +176,7 @@
 <script src="//vega.github.io/vega-lite/vega-lite.js" charset="utf-8"></script>
 <script src="//vega.github.io/vega-editor/vendor/vega-embed.js" charset="utf-8"></script>
 <!-- Leaflet -->
-<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/leaflet.js') }}"></script>
 <!-- GeoJSON files -->
 <script type="text/javascript" src="{{ url_for('static', filename='geo/geoJSON_NL_municipalities.js') }}"></script>
 
@@ -186,7 +186,7 @@
 <!-- Backbone framework
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <script>
-    console.log(L)
+    // console.log(L)
     (function($){
         window.ListView = Backbone.View.extend({
             el: $('body'),
