@@ -18,10 +18,12 @@
 
 <!-- CSS
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/iThing.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
 <link href='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.css' rel='stylesheet' />
+
 
 <!-- Javascript
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -103,16 +105,43 @@
                   </select>
                 </div>
               </div>
-              <!-- <label for="exampleMessage">Message</label>
-              <textarea class="u-full-width" placeholder="Hi Dave …" id="exampleMessage"></textarea>
-              <label class="example-send-yourself-copy">
-                <input type="checkbox">
-                <span class="label-body">Send a copy to yourself</span>
-              </label> -->
-              <!-- <input class="button-primary getGraph" type="submit" value="Submit"> -->
-              <!-- <button class='button-primary getGraph'>Send</button> -->
+              
+              <div class="row">
+                  <div class="one columns">
+                    <label for="featureInput">Temporal</label>
+                    <input class="u-full-width" type="text" placeholder="5" id="featureInput">
+                  </div>
+
+                  <div class="three columns">
+                    <label for="featureInput">granularity</label>
+                    <select class="u-full-width" id="obsProperty">
+                        <option value="Option 1">Hours</option>
+                        <option value="Option 2">Days</option>
+                        <option value="Option 3">Weeks</option>
+                    </select>
+                  </div>
+                  
+                  
+
+              </div>
+
+              <div class="row">
+                <!-- <label for="slider">temporal range</label> -->
+                <div id="slider"></div>
+              </div>
+
+                  <!-- <label for="exampleMessage">Message</label>
+                  <textarea class="u-full-width" placeholder="Hi Dave …" id="exampleMessage"></textarea>
+                  <label class="example-send-yourself-copy">
+                    <input type="checkbox">
+                    <span class="label-body">Send a copy to yourself</span>
+                  </label> -->
+                  <!-- <input class="button-primary getGraph" type="submit" value="Submit"> -->
+                  <!-- <button class='button-primary getGraph'>Send</button> -->
             </form>
-            <button class='button-primary getGraph'>Send</button>
+            <div class="row">
+                <button class='button-primary getGraph'>Send</button>
+            </div>
         </div>
 
 
@@ -169,6 +198,8 @@
 <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.scrollTo-1.4.3.1-min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-ui-1.8.16.custom.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jQDateRangeSlider-min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/json2.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/underscore.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/backbone-min.js') }}"></script>
@@ -269,6 +300,7 @@
 
 
     window.onload = function() {
+        $("#slider").dateRangeSlider();
 
         // ================================================================== //
         // Javascript that creates the leaflet map and all it's functionality //
