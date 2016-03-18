@@ -25,7 +25,8 @@
 
 <!-- Javascript
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script>
+<!-- <script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script> -->
+<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 
 </head>
 <body>
@@ -80,7 +81,39 @@
         </div>
     </div>
     <div class="row content">
+
         <div id="map" class="twelve columns">
+    </div>
+    <div class="row content">
+        <div id="vis">
+            <form>
+              <div class="row">
+                <div class="six columns">
+                  <label for="featureInput">Features</label>
+                  <input class="u-full-width" type="text" placeholder="Municipality Delft, Rotterdam" id="featureInput">
+                </div>
+                <div class="six columns">
+                  <label for="obsProperty">Observed Property</label>
+                  <select class="u-full-width" id="obsProperty">
+                    <option value="Option 1">Nitrogen Dioxide (NO2)</option>
+                    <option value="Option 2">Ozone (O3)</option>
+                    <option value="Option 3">Particulate Matter (PM10)</option>
+                  </select>
+                </div>
+              </div>
+              <!-- <label for="exampleMessage">Message</label>
+              <textarea class="u-full-width" placeholder="Hi Dave …" id="exampleMessage"></textarea>
+              <label class="example-send-yourself-copy">
+                <input type="checkbox">
+                <span class="label-body">Send a copy to yourself</span>
+              </label> -->
+              <!-- <input class="button-primary getGraph" type="submit" value="Submit"> -->
+              <!-- <button class='button-primary getGraph'>Send</button> -->
+            </form>
+            <button class='button-primary getGraph'>Send</button>
+        </div>
+
+
         </div>
     </div>
 </div>
@@ -137,8 +170,13 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/json2.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/underscore.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/backbone-min.js') }}"></script>
-
-
+<!-- Vega Lite dependencies -->
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="//vega.github.io/vega/vega.js" charset="utf-8"></script>
+<script src="//vega.github.io/vega-lite/vega-lite.js" charset="utf-8"></script>
+<script src="//vega.github.io/vega-editor/vendor/vega-embed.js" charset="utf-8"></script>
+<!-- GeoJSON files -->
+<script type="text/javascript" src="{{ url_for('static', filename='geo/geoJSON_NL_municipalities.js') }}"></script>
 
 <!-- ========== -->
 <!-- Javascript -->
@@ -151,7 +189,9 @@
             el: $('body'),
             events: {
               'change select#menu' : 'goTo',
-              'click button.goHome' : 'goHome'
+              'click button.goHome' : 'goHome',
+              // 'click button.getGraph' : 'getVegaGraph',
+              'click button.getGraph' : 'highlight'
             },
             initialize: function() {
                 console.log("start app");
@@ -163,28 +203,188 @@
             goHome: function(){
                 $.scrollTo('#page_1', { duration:800 });
                 $('#menu').val('#page_1');
+            },
+            getVegaGraph: function(){
+                vlSpec = {
+                  "description": "A trellis bar chart showing the US population distribution of age groups and gender in 2000.",
+                  "data": { "url": "https://vega.github.io/vega-editor/app/data/population.json"},
+                  "transform": {
+                    "filter": "datum.year == 2000",
+                    "calculate": [{"field": "gender", "expr": "datum.sex == 2 ? \"Female\" : \"Male\""}]
+                  },
+                  "mark": "bar",
+                  "encoding": {
+                    "row": {"field": "gender", "type": "nominal"},
+                    "y": {
+                      "aggregate": "average", "field": "people", "type": "quantitative",
+                      "axis": {"title": "population"}
+                    },
+                    "x": {
+                      "field": "age", "type": "ordinal",
+                      "scale": {"bandSize": 17}
+                    },
+                    "color": {
+                      "field": "gender", "type": "nominal",
+                      "scale": {"range": ["#FFFFFF","#DDDDDD"]}
+                    }
+                  }
+                }
+
+                var embedSpec = {
+                  mode: "vega-lite",
+                  spec: vlSpec
+                }
+                vg.embed("#vis", embedSpec, function(error, result) {
+                  // Callback receiving the View instance and parsed Vega spec
+                  // result.view is the View, which resides under the '#vis' element
+                });
+            },
+            highlight: function(){
+                var features = $("#featureInput").val();
+                if (features.length > 0){
+                    var featuresArray = features.split(",")
+                    var type = featuresArray[0].split(" ")[0]
+                    featuresArray[0] = featuresArray[0].split(" ").slice(1, featuresArray[0].split(" ").length).join(" ")
+                    for (i = 0; i < featuresArray.length; i++){
+                        featuresArray[i] = featuresArray[i].trim()
+                    } 
+
+                    console.log(type)
+                    console.log(featuresArray)
+                } else {
+                    console.log("No input features")
+                }
+                
             }
         });
 
     var listView = new ListView();
     })(jQuery);
 
+
+    
+
+
     window.onload = function() {
+
+        // ================================================================== //
+        // Javascript that creates the leaflet map and all it's functionality //
+        // ================================================================== //
+
+        var map = L.map('map').setView([51.686068, 5.198107], 7);
+        
+        map.scrollWheelZoom.disable();
+
+
         if (screen.width > 1000){
             $('#menuContainer').css('visibility','visible');
             $('.goHome').css('visibility','visible');
+            map.scrollWheelZoom.enable();
 
         }
-        L.mapbox.accessToken = 'pk.eyJ1IjoiaXZvMTEyMzUiLCJhIjoieV82bFVfNCJ9.G8mrfJOA07edDDj6Bep2bQ';
-        var map = L.mapbox.map('map', 'mapbox.satellite').setView([51.686068, 5.198107], 7);
-        var NLprov = omnivore.kml('{{ url_for('static', filename='geo/provNL.kml') }}')
-            .addTo(map);
-        var BEprov = omnivore.kml('{{ url_for('static', filename='geo/provBE.kml') }}')
-            .addTo(map);
 
-        map.on('mousedown', function(e) {
-            console.log(e.latlng.toString());
-        });
+
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
+            maxZoom: 18,
+            minZoom: 4,
+            id: 'mapbox.satellite'
+        }).addTo(map);
+
+
+
+        // control that shows state info on hover
+        // var info = L.control();
+
+        // info.onAdd = function (map) {
+        //     this._div = L.DomUtil.create('div', 'info');
+        //     this.update();
+        //     return this._div;
+        // };
+
+        // info.update = function (props) {
+        //     this._div.innerHTML = '<h4>Feature</h4>' +  (props ?
+        //         '<b>' + props + '</b>'
+        //         : 'Hover over a state');
+        // };
+
+        // info.addTo(map);
+
+
+        function style(feature) {
+            return {
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7,
+                fillColor: '#FFEDA0'
+            };
+        }
+
+        function highlightToggle(e){
+            // console.log("toggle")
+            // console.log(e.target.feature.highlighted)
+            if (e.target.feature.highlighted == undefined){
+                e.target.feature.highlighted = true;
+                // console.log("undefined");
+                highlightFeature(e);
+            } else if (e.target.feature.highlighted == true){
+                e.target.feature.highlighted = false;
+                // console.log("already highlighted");
+                resetHighlight(e);
+            } else {
+                e.target.feature.highlighted = true;
+                // console.log("not yet highlighted");
+                highlightFeature(e);
+            };
+            
+        }
+
+        function highlightFeature(e) {
+            var layer = e.target;
+            console.log(e.target.feature.properties.Gemeentena)
+            layer.setStyle({
+                weight: 5,
+                color: '#666',
+                dashArray: '',
+                fillOpacity: 0
+            });
+
+            if (!L.Browser.ie && !L.Browser.opera) {
+                layer.bringToFront();
+            }
+
+            // info.update(layer.feature.properties);
+        }
+
+        var geojson;
+
+        function resetHighlight(e) {
+            geojson.resetStyle(e.target);
+            // info.update();
+        }
+
+        function zoomToFeature(e) {
+            map.fitBounds(e.target.getBounds());
+        }
+
+        function onEachFeature(feature, layer) {
+            layer.on({
+                // mouseover: highlightFeature,
+                // mouseout: resetHighlight,
+                // click: zoomToFeature
+                click: highlightToggle
+            });
+        }
+
+        geojson = L.geoJson(statesData, {
+            style: style,
+            onEachFeature: onEachFeature
+        }).addTo(map);
+        
+
+
 
     }
 </script>
