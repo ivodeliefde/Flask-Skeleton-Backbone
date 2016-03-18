@@ -94,30 +94,39 @@
               <div class="row">
                 <div class="six columns">
                   <label for="featureInput">Features</label>
-                  <input class="u-full-width" type="text" placeholder="Municipality Delft, Rotterdam" id="featureInput">
+                  <input class="u-full-width" type="text" placeholder="Delft, Rotterdam" id="featureInput">
                 </div>
                 <div class="six columns">
                   <label for="obsProperty">Observed Property</label>
                   <select class="u-full-width" id="obsProperty">
-                    <option value="Option 1">Nitrogen Dioxide (NO2)</option>
-                    <option value="Option 2">Ozone (O3)</option>
-                    <option value="Option 3">Particulate Matter (PM10)</option>
+                    <option value="NO2">Nitrogen Dioxide (NO2)</option>
+                    <option value="O3">Ozone (O3)</option>
+                    <option value="PM10">Particulate Matter (PM10)</option>
                   </select>
                 </div>
               </div>
               
               <div class="row">
+                  <div class="six columns">
+                    <label for="featureInputType">Feature type</label>
+                    <select class="u-full-width" id="featureInputType">
+                        <option value="Municipality">Municipality</option>
+                        <option value="Province">Province</option>
+                        <option value="Landcover">Land cover</option>
+                        <option value="Raster">Raster</option>
+                    </select>
+                  </div>
                   <div class="one columns">
-                    <label for="featureInput">Temporal</label>
-                    <input class="u-full-width" type="text" placeholder="5" id="featureInput">
+                    <label for="tempGranValue">Temporal</label>
+                    <input class="u-full-width" type="text" placeholder="12" id="tempGranValue">
                   </div>
 
-                  <div class="three columns">
-                    <label for="featureInput">granularity</label>
-                    <select class="u-full-width" id="obsProperty">
-                        <option value="Option 1">Hours</option>
-                        <option value="Option 2">Days</option>
-                        <option value="Option 3">Weeks</option>
+                  <div class="five columns">
+                    <label for="tempGranUnit">granularity</label>
+                    <select class="u-full-width" id="tempGranUnit">
+                        <option value="Hours">Hours</option>
+                        <option value="Days">Days</option>
+                        <option value="Weeks">Weeks</option>
                     </select>
                   </div>
                   
@@ -126,8 +135,9 @@
               </div>
 
               <div class="row">
-                <!-- <label for="slider">temporal range</label> -->
+                <label for="slider">temporal range</label>
                 <div id="slider"></div>
+
               </div>
 
                   <!-- <label for="exampleMessage">Message</label>
@@ -138,6 +148,7 @@
                   </label> -->
                   <!-- <input class="button-primary getGraph" type="submit" value="Submit"> -->
                   <!-- <button class='button-primary getGraph'>Send</button> -->
+
             </form>
             <div class="row">
                 <button class='button-primary getGraph'>Send</button>
@@ -209,7 +220,7 @@
 <script src="//vega.github.io/vega-lite/vega-lite.js" charset="utf-8"></script>
 <script src="//vega.github.io/vega-editor/vendor/vega-embed.js" charset="utf-8"></script>
 <!-- GeoJSON files -->
-<script type="text/javascript" src="{{ url_for('static', filename='geo/geoJSON_NL_municipalities.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='geo/municipalities.js') }}"></script>
 
 <!-- ========== -->
 <!-- Javascript -->
@@ -225,7 +236,8 @@
               'change select#menu' : 'goTo',
               'click button.goHome' : 'goHome',
               // 'click button.getGraph' : 'getVegaGraph',
-              'click button.getGraph' : 'highlight'
+              'click button.getGraph' : 'highlight',
+              'change select#featureInputType' : 'loadGeoJSON'
             },
             initialize: function() {
                 console.log("start app");
@@ -267,7 +279,7 @@
                 var embedSpec = {
                   mode: "vega-lite",
                   spec: vlSpec
-                }
+                } 
                 vg.embed("#vis", embedSpec, function(error, result) {
                   // Callback receiving the View instance and parsed Vega spec
                   // result.view is the View, which resides under the '#vis' element
@@ -277,18 +289,18 @@
                 var features = $("#featureInput").val();
                 if (features.length > 0){
                     var featuresArray = features.split(",")
-                    var type = featuresArray[0].split(" ")[0]
-                    featuresArray[0] = featuresArray[0].split(" ").slice(1, featuresArray[0].split(" ").length).join(" ")
                     for (i = 0; i < featuresArray.length; i++){
                         featuresArray[i] = featuresArray[i].trim()
                     } 
-
-                    console.log(type)
+                    // console.log(type)
                     console.log(featuresArray)
                 } else {
                     console.log("No input features")
                 }
-                
+            },
+            loadGeoJSON: function(){
+                this.input = this.$('#featureInputType');
+                console.log(this.input.val())
             }
         });
 
@@ -378,7 +390,7 @@
 
         function highlightFeature(e) {
             var layer = e.target;
-            console.log(e.target.feature.properties.Gemeentena)
+            // console.log(e.target.feature.properties.NAME)
             layer.setStyle({
                 weight: 5,
                 color: '#666',
@@ -391,6 +403,26 @@
             }
 
             // info.update(layer.feature.properties);
+            names = $("#featureInput").val()
+            newName = e.target.feature.properties.NAME
+            if (newName.length == 0){
+                return
+            }
+             
+            namesArray = names.split(',')
+
+            if (namesArray[0].length > 0){
+                newName = " "+e.target.feature.properties.NAME
+                namesArray.push(newName)
+                outputNames = namesArray.join()
+            } else {
+                namesArray = [newName]
+                outputNames = namesArray.join()
+            }
+            // console.log(outputNames)
+            
+            $("#featureInput").val(outputNames)
+
         }
 
         var geojson;
@@ -398,6 +430,15 @@
         function resetHighlight(e) {
             geojson.resetStyle(e.target);
             // info.update();
+            names = $("#featureInput").val()
+            newName = e.target.feature.properties.NAME
+            namesArray = names.split(',')
+            namesArray.remove(newName)
+            namesArray.remove(" "+newName)
+            outputNames = namesArray.join()
+            $("#featureInput").val(outputNames)
+
+
         }
 
         function zoomToFeature(e) {
@@ -413,13 +454,23 @@
             });
         }
 
-        geojson = L.geoJson(statesData, {
+        geojson = L.geoJson(municipalities, {
             style: style,
             onEachFeature: onEachFeature
         }).addTo(map);
         
 
-
+        // Create function to remove item from array by value
+        Array.prototype.remove = function() {
+            var what, a = arguments, L = a.length, ax;
+            while (L && this.length) {
+                what = a[--L];
+                while ((ax = this.indexOf(what)) !== -1) {
+                    this.splice(ax, 1);
+                }
+            }
+            return this;
+        };
 
     }
 </script>
