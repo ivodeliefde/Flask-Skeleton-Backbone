@@ -26,7 +26,7 @@
 <!-- Javascript
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <!-- <script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script> -->
-<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
 
 </head>
 <body>
@@ -175,6 +175,8 @@
 <script src="//vega.github.io/vega/vega.js" charset="utf-8"></script>
 <script src="//vega.github.io/vega-lite/vega-lite.js" charset="utf-8"></script>
 <script src="//vega.github.io/vega-editor/vendor/vega-embed.js" charset="utf-8"></script>
+<!-- Leaflet -->
+<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 <!-- GeoJSON files -->
 <script type="text/javascript" src="{{ url_for('static', filename='geo/geoJSON_NL_municipalities.js') }}"></script>
 
@@ -272,7 +274,7 @@
         // ================================================================== //
 
         var map = L.map('map').setView([51.686068, 5.198107], 7);
-        
+
         map.scrollWheelZoom.disable();
 
 
