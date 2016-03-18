@@ -26,6 +26,8 @@
 <!-- Javascript
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <!-- <script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script> -->
+<!-- Leaflet -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/leaflet.js') }}"></script>
 
 
 </head>
@@ -175,8 +177,6 @@
 <script src="//vega.github.io/vega/vega.js" charset="utf-8"></script>
 <script src="//vega.github.io/vega-lite/vega-lite.js" charset="utf-8"></script>
 <script src="//vega.github.io/vega-editor/vendor/vega-embed.js" charset="utf-8"></script>
-<!-- Leaflet -->
-<script type="text/javascript" src="{{ url_for('static', filename='js/leaflet.js') }}"></script>
 <!-- GeoJSON files -->
 <script type="text/javascript" src="{{ url_for('static', filename='geo/geoJSON_NL_municipalities.js') }}"></script>
 
