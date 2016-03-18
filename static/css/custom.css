@@ -29,7 +29,12 @@ html, body {
     /*max-width: 20vw;*/
 }
 
-
+#vis form {
+    /*background-color: red;
+    min-height: 5vh; 
+    margin-top: 1vh;*/
+    color: black;
+}
 
 h1 {
     color: black;
