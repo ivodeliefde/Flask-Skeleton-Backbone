@@ -78,13 +78,13 @@
   border: 1px solid white;
 }
 
-.ui-rangeSlider-disabled .ui-rangeSlider-container,
+/*.ui-rangeSlider-disabled .ui-rangeSlider-container,
 .ui-rangeSlider-disabled .ui-rangeSlider-arrow,
 .ui-rangeSlider-disabled .ui-rangeSlider-label{
   background: #95a4bd;
   /*background: -moz-linear-gradient(top, #95a4bd 0%, #b2bbd8 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#95a4bd), color-stop(100%,#b2bbd8));*/
-}
+/*}*/
 
 .ui-rangeSlider-arrow{
   width:14px;
@@ -105,9 +105,9 @@
   border-right: solid 1px white;
 }
 
-.ui-rangeSlider-disabled .ui-rangeSlider-rightArrow{
+/*.ui-rangeSlider-disabled .ui-rangeSlider-rightArrow{
  border-right-color: #8792a2; 
-}
+}*/
 
 .ui-rangeSlider-arrow-inner{
   position: absolute;
@@ -128,11 +128,11 @@
   border-right:10px solid #b3b6c2;
 }
 
-.ui-rangeSlider-disabled .ui-rangeSlider-leftArrow .ui-rangeSlider-arrow-inner,
+/*.ui-rangeSlider-disabled .ui-rangeSlider-leftArrow .ui-rangeSlider-arrow-inner,
 .ui-rangeSlider-disabled .ui-rangeSlider-leftArrow:hover .ui-rangeSlider-arrow-inner{
-  border-right-color: #bbc0cf;
+  border-right-color: white;
 }
-
+*/
 .ui-rangeSlider-rightArrow .ui-rangeSlider-arrow-inner{
   border-left:10px solid #a4a8b7;
   right: 0;
@@ -143,10 +143,10 @@
   border-left:10px solid #b3b6c2;
 }
 
-.ui-rangeSlider-disabled .ui-rangeSlider-rightArrow .ui-rangeSlider-arrow-inner,
+/*.ui-rangeSlider-disabled .ui-rangeSlider-rightArrow .ui-rangeSlider-arrow-inner,
 .ui-rangeSlider-disabled .ui-rangeSlider-rightArrow:hover .ui-rangeSlider-arrow-inner{
   border-left-color: #bbc0cf;
-}
+}*/
 
 .ui-rangeSlider-innerBar{
   width: 110%;

@@ -87,6 +87,9 @@
             });
         },
         highlightToggle: function(e){
+            if ($("#featureInput").attr("disabled") == 'disabled'){
+                return
+            };
             if (e.target.feature.highlighted == undefined){
                 e.target.feature.highlighted = true;
                 // console.log("undefined");
@@ -116,10 +119,10 @@
 
             names = $("#featureInput").val()
             newName = e.target.feature.properties.NAME
-            if (newName.length == 0){
+            if (newName.length == 0 || $("#featureInput").attr("disabled") == 'disabled'){
                 return
             }
-             
+            
             namesArray = names.split(',')
 
             if (namesArray[0].length > 0){
@@ -223,13 +226,22 @@
                 $('#tempGranValue').css('border','2px solid red');
                 problems.push("temporal granularity value");
             }
+            console.log(problems);
             if (problems.length > 0){
                 errorText = '<h5>Please select '+problems.join(' & ')+'</h5>';
                 $('#error').html(errorText);
             } else {
+                console.log("send data");
                 $('#error').html('');
                 $('.getGraph').html('Calculating...');
                 $('button.getGraph').prop('disabled', true);
+                $('#featureInput').attr("disabled", "disabled");
+                $('#featureInputType').attr("disabled", "disabled"); 
+                $('#obsProperty').attr("disabled", "disabled"); 
+                $('#tempGranValue').attr("disabled", "disabled"); 
+                $('#tempGranUnit').attr("disabled", "disabled"); 
+                $('#slider').dateRangeSlider("disable");
+                window.alert("Still under construction.. Sorry!");
             }
 
             // vlSpec = {
