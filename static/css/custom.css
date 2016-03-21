@@ -40,6 +40,16 @@ html, body {
     color:black;
 }
 
+#error h5 {
+    /*background-color: ;*/
+    color: black;
+    /*border-radius: 0.2em;*/
+    text-align: center;
+    /*padding: 1vh;*/
+    font-weight: bolder;
+
+}
+
 textarea {
     resize: vertical;
 }

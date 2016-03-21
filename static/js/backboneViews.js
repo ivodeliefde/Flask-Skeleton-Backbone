@@ -40,12 +40,12 @@
                     onEachFeature: MapView.onEachFeature
                 }).addTo(window.map);
                 $("#featureInput").attr('placeholder', "Zuid-Holland, Utrecht");
-            } else if (layerInput == 'Landcover'){
-                window.geojson = L.geoJson(corine, {
-                    style: MapView.style(),
-                    onEachFeature: MapView.onEachFeature
-                }).addTo(window.map);
-                $("#featureInput").attr('placeholder', "Zuid-Holland, Utrecht");
+            // } else if (layerInput == 'Landcover'){
+            //     window.geojson = L.geoJson(corine, {
+            //         style: MapView.style(),
+            //         onEachFeature: MapView.onEachFeature
+            //     }).addTo(window.map);
+            //     $("#featureInput").attr('placeholder', "Zuid-Holland, Utrecht");
             } else if (layerInput == 'Raster 10km2'){
                 window.geojson = L.geoJson(rasterTen, {
                     style: MapView.style(),
@@ -162,7 +162,7 @@
         formTemplate: _.template($('#formTemplate').html()),
 
         initialize: function() {
-            console.log("start app");
+            // console.log("start app");
 
             this.getForm()
 
@@ -200,41 +200,73 @@
             $('#menu').val('#page_1');
         },
         getVegaGraph: function(){
-            vlSpec = {
-              "description": "A trellis bar chart showing the US population distribution of age groups and gender in 2000.",
-              "data": { "url": "https://vega.github.io/vega-editor/app/data/population.json"},
-              "transform": {
-                "filter": "datum.year == 2000",
-                "calculate": [{"field": "gender", "expr": "datum.sex == 2 ? \"Female\" : \"Male\""}]
-              },
-              "mark": "bar",
-              "encoding": {
-                "row": {"field": "gender", "type": "nominal"},
-                "y": {
-                  "aggregate": "average", "field": "people", "type": "quantitative",
-                  "axis": {"title": "population"}
-                },
-                "x": {
-                  "field": "age", "type": "ordinal",
-                  "scale": {"bandSize": 17}
-                },
-                "color": {
-                  "field": "gender", "type": "nominal",
-                  "scale": {"range": ["#FFFFFF","#DDDDDD"]}
-                }
-              }
+            var features = $('#featureInput').val();
+            console.log(features);
+            var featureCategory = $('#featureInputType').val();
+            console.log(featureCategory);
+            var obsProperty = "http://dbpedia.org/resource/"+$('#obsProperty').val();
+            console.log(obsProperty);
+            var temporalGranularity = $('#tempGranValue').val() +" "+ $('#tempGranUnit').val();
+            console.log(temporalGranularity);
+            var startTime = new Date($('#slider').dateRangeSlider("values").min.setUTCHours(0)).toISOString();
+            console.log(startTime);
+            var endTime = new Date($('#slider').dateRangeSlider("values").max.setUTCHours(0)).toISOString();
+            console.log(endTime);
+
+            problems = []
+
+            if (features.length == 0){
+                $('#featureInput').css('border','2px solid red');
+                problems.push("features");
+            }
+            if ($('#tempGranValue').val().length == 0){
+                $('#tempGranValue').css('border','2px solid red');
+                problems.push("temporal granularity value");
+            }
+            if (problems.length > 0){
+                errorText = '<h5>Please select '+problems.join(' & ')+'</h5>';
+                $('#error').html(errorText);
+            } else {
+                $('#error').html('');
+                $('.getGraph').html('Calculating...');
+                $('button.getGraph').prop('disabled', true);
             }
 
-            var embedSpec = {
-              mode: "vega-lite",
-              spec: vlSpec
-            } 
-            vg.embed("#vis", embedSpec, function(error, result) {
-              // Callback receiving the View instance and parsed Vega spec
-              // result.view is the View, which resides under the '#vis' element
-            });
+            // vlSpec = {
+            //   "description": "A trellis bar chart showing the US population distribution of age groups and gender in 2000.",
+            //   "data": { "url": "https://vega.github.io/vega-editor/app/data/population.json"},
+            //   "transform": {
+            //     "filter": "datum.year == 2000",
+            //     "calculate": [{"field": "gender", "expr": "datum.sex == 2 ? \"Female\" : \"Male\""}]
+            //   },
+            //   "mark": "bar",
+            //   "encoding": {
+            //     "row": {"field": "gender", "type": "nominal"},
+            //     "y": {
+            //       "aggregate": "average", "field": "people", "type": "quantitative",
+            //       "axis": {"title": "population"}
+            //     },
+            //     "x": {
+            //       "field": "age", "type": "ordinal",
+            //       "scale": {"bandSize": 17}
+            //     },
+            //     "color": {
+            //       "field": "gender", "type": "nominal",
+            //       "scale": {"range": ["#FFFFFF","#DDDDDD"]}
+            //     }
+            //   }
+            // }
 
-            $('#vis').append("<button class='button-primary getForm'>Back to form</button>")
+            // var embedSpec = {
+            //   mode: "vega-lite",
+            //   spec: vlSpec
+            // } 
+            // vg.embed("#vis", embedSpec, function(error, result) {
+            //   // Callback receiving the View instance and parsed Vega spec
+            //   // result.view is the View, which resides under the '#vis' element
+            // });
+
+            // $('#vis').append("<button class='button-primary getForm'>Back to form</button>")
         },
         getGeoJSON: function(){
             this.input = this.$('#featureInputType');

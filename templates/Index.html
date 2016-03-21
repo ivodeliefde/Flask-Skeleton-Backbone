@@ -58,9 +58,9 @@
     <div class="seven columns">
       <label for="obsProperty">Observed Property</label>
       <select class="u-full-width" id="obsProperty">
-        <option value="NO2">Nitrogen Dioxide (NO2)</option>
-        <option value="O3">Ozone (O3)</option>
-        <option value="PM10">Particulate Matter (PM10)</option>
+        <option value="Nitrogen_Dioxide">Nitrogen Dioxide (NO2)</option>
+        <option value="Ozone">Ozone (O3)</option>
+        <option value="Particulates">Particulate Matter (PM10)</option>
       </select>
     </div>
   </div>
@@ -159,9 +159,11 @@
         <div id="map" class="twelve columns"></div>
     </div>
     <div class="row content">
-        <div id="vis">
-            
-            
+        <div id="vis">    
+            <!-- Form / graphs go here -->
+        </div>
+        <div id="error" class="twelve columns">
+            <!-- Error messages go here -->
         </div>
 
 
@@ -208,6 +210,9 @@
             </ul>
         </div>
     </div>
+</div>
+<div id="dialog" title="Empty form fields">
+  <p>Please problems.join</p>
 </div>
 
 <!-- Javascript dependencies
