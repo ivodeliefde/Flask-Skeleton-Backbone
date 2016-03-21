@@ -40,6 +40,10 @@ html, body {
     color:black;
 }
 
+textarea {
+    resize: vertical;
+}
+
 h1 {
     color: black;
 }
