@@ -226,7 +226,7 @@
                 $('#tempGranValue').css('border','2px solid red');
                 problems.push("temporal granularity value");
             }
-            console.log(problems);
+            // console.log(problems);
             if (problems.length > 0){
                 errorText = '<h5>Please select '+problems.join(' & ')+'</h5>';
                 $('#error').html(errorText);
@@ -241,44 +241,79 @@
                 $('#tempGranValue').attr("disabled", "disabled"); 
                 $('#tempGranUnit').attr("disabled", "disabled"); 
                 $('#slider').dateRangeSlider("disable");
-                window.alert("Still under construction.. Sorry!");
+                // alert("Still under construction.. Sorry!");
+                // $.post("http://localhost/cgi-bin/pywps.cgi?service=wps&version=1.0.0&request=execute&identifier=GetSensorData", {
+                var data = {
+                    'features' : 'features',
+                    'featureCategory' : 'featureCategory'
+                };
+                console.log(JSON.stringify(data, null, '\t'));
+
+                $.ajax({
+                  type: "POST",
+                  contentType: "application/json; charset=utf-8",
+                  url: "/makeRequest",
+                  data: JSON.stringify({feature: features, featureType: featureCategory}),
+                  success: function (data) {
+                    console.log(data.title);
+                    console.log(data.article);
+
+
+                    vlSpec = {
+                      "description": "A trellis bar chart showing the US population distribution of age groups and gender in 2000.",
+                      "data": { "url": "https://vega.github.io/vega-editor/app/data/population.json"},
+                      "transform": {
+                        "filter": "datum.year == 2000",
+                        "calculate": [{"field": "gender", "expr": "datum.sex == 2 ? \"Female\" : \"Male\""}]
+                      },
+                      "mark": "bar",
+                      "encoding": {
+                        "row": {"field": "gender", "type": "nominal"},
+                        "y": {
+                          "aggregate": "average", "field": "people", "type": "quantitative",
+                          "axis": {"title": "population"}
+                        },
+                        "x": {
+                          "field": "age", "type": "ordinal",
+                          "scale": {"bandSize": 17}
+                        },
+                        "color": {
+                          "field": "gender", "type": "nominal",
+                          "scale": {"range": ["#FFFFFF","#DDDDDD"]}
+                        }
+                      }
+                    }
+
+                    var embedSpec = {
+                      mode: "vega-lite",
+                      spec: vlSpec
+                    } 
+                    vg.embed("#vis", embedSpec, function(error, result) {
+                      // Callback receiving the View instance and parsed Vega spec
+                      // result.view is the View, which resides under the '#vis' element
+                    });
+
+                    $('#vis').append("<button class='button-primary getForm'>Back to form</button>")
+
+
+
+                    
+                  },
+                  dataType: "json"
+                });
+                // var request = new XMLHttpRequest();
+                // request.onload = function() {
+                //     alert(request.responseText);
+                // };
+                // // We point the request at the appropriate command
+                // request.open("POST", "/makeRequest", true);
+                // // and then we send it off
+                // request.send();
             }
 
-            // vlSpec = {
-            //   "description": "A trellis bar chart showing the US population distribution of age groups and gender in 2000.",
-            //   "data": { "url": "https://vega.github.io/vega-editor/app/data/population.json"},
-            //   "transform": {
-            //     "filter": "datum.year == 2000",
-            //     "calculate": [{"field": "gender", "expr": "datum.sex == 2 ? \"Female\" : \"Male\""}]
-            //   },
-            //   "mark": "bar",
-            //   "encoding": {
-            //     "row": {"field": "gender", "type": "nominal"},
-            //     "y": {
-            //       "aggregate": "average", "field": "people", "type": "quantitative",
-            //       "axis": {"title": "population"}
-            //     },
-            //     "x": {
-            //       "field": "age", "type": "ordinal",
-            //       "scale": {"bandSize": 17}
-            //     },
-            //     "color": {
-            //       "field": "gender", "type": "nominal",
-            //       "scale": {"range": ["#FFFFFF","#DDDDDD"]}
-            //     }
-            //   }
-            // }
 
-            // var embedSpec = {
-            //   mode: "vega-lite",
-            //   spec: vlSpec
-            // } 
-            // vg.embed("#vis", embedSpec, function(error, result) {
-            //   // Callback receiving the View instance and parsed Vega spec
-            //   // result.view is the View, which resides under the '#vis' element
-            // });
 
-            // $('#vis').append("<button class='button-primary getForm'>Back to form</button>")
+            
         },
         getGeoJSON: function(){
             this.input = this.$('#featureInputType');

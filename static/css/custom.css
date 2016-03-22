@@ -23,11 +23,20 @@ html, body {
     color: black;
 }
 
+
 #menu {
     border: none;
     background-color: #e9ece5;
-    /*max-width: 20vw;*/
+    /*max-width: 20vw;*/ 
 }
+/*
+#vis {
+    background-color: white;
+    margin-left: -1vw;
+    margin-right: -1vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+}*/
 
 #vis form {
     /*background-color: red;
@@ -89,10 +98,11 @@ button {
 .container {
     /*background-color: white;*/
 
-    min-height: 100vh;
+    min-height: 101vh;
     /*padding-left: 1vw;
     padding-right: 1vw;*/
     border-right: solid #e9ece5;
+    /*margin-bottom: 1vh;*/
 }
 
 .content {
