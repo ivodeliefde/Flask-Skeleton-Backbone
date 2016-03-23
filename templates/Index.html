@@ -223,9 +223,9 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/backbone-min.js') }}"></script>
 <!-- Vega Lite dependencies -->
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="//vega.github.io/vega/vega.js" charset="utf-8"></script>
-<script src="//vega.github.io/vega-lite/vega-lite.js" charset="utf-8"></script>
-<script src="//vega.github.io/vega-editor/vendor/vega-embed.js" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/vega.js') }}" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/vega-lite.js') }}" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/vega-embed.js') }}" charset="utf-8"></script>
 <!-- GeoJSON files -->
 <script type="text/javascript" src="{{ url_for('static', filename='geo/municipalities.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='geo/provinces.js') }}"></script>

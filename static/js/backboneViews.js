@@ -241,8 +241,7 @@
                 $('#tempGranValue').attr("disabled", "disabled"); 
                 $('#tempGranUnit').attr("disabled", "disabled"); 
                 $('#slider').dateRangeSlider("disable");
-                // alert("Still under construction.. Sorry!");
-                // $.post("http://localhost/cgi-bin/pywps.cgi?service=wps&version=1.0.0&request=execute&identifier=GetSensorData", {
+                alert("Still under construction.. Sorry!");
                 var data = {
                     'features' : 'features',
                     'featureCategory' : 'featureCategory'
@@ -255,9 +254,7 @@
                   url: "/makeRequest",
                   data: JSON.stringify({feature: features, featureType: featureCategory}),
                   success: function (data) {
-                    console.log(data.title);
-                    console.log(data.article);
-
+                    console.log(data);
 
                     vlSpec = {
                       "description": "A trellis bar chart showing the US population distribution of age groups and gender in 2000.",
@@ -287,28 +284,25 @@
                     var embedSpec = {
                       mode: "vega-lite",
                       spec: vlSpec
-                    } 
+                    }
+
                     vg.embed("#vis", embedSpec, function(error, result) {
                       // Callback receiving the View instance and parsed Vega spec
                       // result.view is the View, which resides under the '#vis' element
                     });
-
+                    console.log("add to #vis")
                     $('#vis').append("<button class='button-primary getForm'>Back to form</button>")
-
-
-
-                    
+                        
+                  },
+                  error: function(e,f){
+                    console.log("error ");
+                    console.log(e);
+                    console.log(f);
                   },
                   dataType: "json"
                 });
-                // var request = new XMLHttpRequest();
-                // request.onload = function() {
-                //     alert(request.responseText);
-                // };
-                // // We point the request at the appropriate command
-                // request.open("POST", "/makeRequest", true);
-                // // and then we send it off
-                // request.send();
+
+                
             }
 
 

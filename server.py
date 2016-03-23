@@ -14,11 +14,11 @@ def makeRequest():
 	dataDict = json.loads(data)	
 	print type(dataDict), dataDict
 
-	r = requests.get("http://localhost/cgi-bin/pywps.cgi?service=wps&version=1.0.0&request=execute&identifier=GetSensorData")
-	print r
-	print r.content
+	# r = requests.get("http://localhost/cgi-bin/pywps.cgi?service=wps&version=1.0.0&request=execute&identifier=GetSensorData")
+	# print r
+	# print r.content
 
- 	return "response, 200, {'Content-Type': 'text/plain'}"
+ 	return json.dumps("response, 200, {'Content-Type': 'text/plain'}")
 
 if __name__ == '__main__':
   	app.run(debug=True)
