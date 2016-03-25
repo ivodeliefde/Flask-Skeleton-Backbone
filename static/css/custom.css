@@ -117,6 +117,12 @@ button {
     height: 50vh;
 }
 
+#popup {
+    padding: 1px;
+    /*overflow: auto;*/
+    word-wrap: break-word;
+}
+
 a, a:hover {
     color: #212121;
     text-decoration: none;

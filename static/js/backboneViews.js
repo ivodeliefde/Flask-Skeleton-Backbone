@@ -206,9 +206,19 @@
             $('#menu').val('#page_1');
         },
         getVegaGraph: function(){
-            var features = $('#featureInput').val();
-            console.log(features);
+            var features = $('#featureInput').val().split("");
+            for (i=0;i<features.length;i++){
+                if (features[i] == " "){
+                    // console.log("Space")
+                    delete features[i];
+                }
+            }
+            features = features.join("")
+            console.log( features );
             var featureCategory = $('#featureInputType').val();
+            if (featureCategory.indexOf("Raster") > -1){
+                featureCategory = "raster"
+            }
             console.log(featureCategory);
             var obsProperty = "http://dbpedia.org/resource/"+$('#obsProperty').val();
             console.log(obsProperty);
@@ -244,7 +254,7 @@
                 $('#tempGranValue').attr("disabled", "disabled"); 
                 $('#tempGranUnit').attr("disabled", "disabled"); 
                 $('#slider').dateRangeSlider("disable");
-                alert("Still under construction.. Sorry!");
+                // alert("Still under construction.. Sorry!");
                 var data = {
                     'features' : 'features',
                     'featureCategory' : 'featureCategory'
@@ -254,47 +264,73 @@
                 $.ajax({
                   type: "POST",
                   contentType: "application/json; charset=utf-8",
-                  url: "/makeRequest",
+                  url: "/getSensors",
                   data: JSON.stringify({feature: features, featureType: featureCategory}),
                   success: function (data) {
-                    console.log(data);
+                    data = JSON.parse(data.sensors)
+                    console.log(data.type);
+                   
+                    function onEachFeature(feature, layer) {
+                        var popupContent = "<div class='row' id='popup'><p><ul><li> URI: " + feature.properties.sensorUri +"</li><li> observedProperty: " + feature.properties.observedProperty[1]  +"</li><li> SOS: " + feature.properties.sos +"</li></ul></p></div>";
 
-                    vlSpec = {
-                      "description": "A trellis bar chart showing the US population distribution of age groups and gender in 2000.",
-                      "data": { "url": "https://vega.github.io/vega-editor/app/data/population.json"},
-                      "transform": {
-                        "filter": "datum.year == 2000",
-                        "calculate": [{"field": "gender", "expr": "datum.sex == 2 ? \"Female\" : \"Male\""}]
-                      },
-                      "mark": "bar",
-                      "encoding": {
-                        "row": {"field": "gender", "type": "nominal"},
-                        "y": {
-                          "aggregate": "average", "field": "people", "type": "quantitative",
-                          "axis": {"title": "population"}
-                        },
-                        "x": {
-                          "field": "age", "type": "ordinal",
-                          "scale": {"bandSize": 17}
-                        },
-                        "color": {
-                          "field": "gender", "type": "nominal",
-                          "scale": {"range": ["#FFFFFF","#DDDDDD"]}
+                        layer.bindPopup(popupContent);
+                    };
+
+
+                    window.geojsonSensors = L.geoJson(data,{
+                        onEachFeature: onEachFeature,
+                        pointToLayer: function (feature, latlng) {
+                        return L.circleMarker(latlng, {
+                            radius: 8,
+                            fillColor: "#ff7800",
+                            color: "#000",
+                            weight: 1,
+                            opacity: 1,
+                            fillOpacity: 0.8
+                            });
                         }
-                      }
-                    }
+                    }).addTo(window.map);
+                    map.fitBounds(window.geojsonSensors.getBounds());
 
-                    var embedSpec = {
-                      mode: "vega-lite",
-                      spec: vlSpec
-                    }
 
-                    vg.embed("#vis", embedSpec, function(error, result) {
-                      // Callback receiving the View instance and parsed Vega spec
-                      // result.view is the View, which resides under the '#vis' element
-                    });
-                    console.log("add to #vis")
-                    $('#vis').append("<button class='button-primary getForm'>Back to form</button>")
+
+
+                    // vlSpec = {
+                    //   "description": "A trellis bar chart showing the US population distribution of age groups and gender in 2000.",
+                    //   "data": { "url": "https://vega.github.io/vega-editor/app/data/population.json"},
+                    //   "transform": {
+                    //     "filter": "datum.year == 2000",
+                    //     "calculate": [{"field": "gender", "expr": "datum.sex == 2 ? \"Female\" : \"Male\""}]
+                    //   },
+                    //   "mark": "bar",
+                    //   "encoding": {
+                    //     "row": {"field": "gender", "type": "nominal"},
+                    //     "y": {
+                    //       "aggregate": "average", "field": "people", "type": "quantitative",
+                    //       "axis": {"title": "population"}
+                    //     },
+                    //     "x": {
+                    //       "field": "age", "type": "ordinal",
+                    //       "scale": {"bandSize": 17}
+                    //     },
+                    //     "color": {
+                    //       "field": "gender", "type": "nominal",
+                    //       "scale": {"range": ["#FFFFFF","#DDDDDD"]}
+                    //     }
+                    //   }
+                    // }
+
+                    // var embedSpec = {
+                    //   mode: "vega-lite",
+                    //   spec: vlSpec
+                    // }
+
+                    // vg.embed("#vis", embedSpec, function(error, result) {
+                    //   // Callback receiving the View instance and parsed Vega spec
+                    //   // result.view is the View, which resides under the '#vis' element
+                    // });
+                    // console.log("add to #vis")
+                    // $('#vis').append("<button class='button-primary getForm'>Back to form</button>")
                         
                   },
                   error: function(e,f){

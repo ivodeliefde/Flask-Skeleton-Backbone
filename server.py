@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, json, url_for
 import requests
+from lxml import etree
 
 geoFiles = {}
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
@@ -16,17 +17,22 @@ app = Flask(__name__)
 def start():
 	return render_template('Index.html')
 
-@app.route('/makeRequest',  methods=['POST'])
-def makeRequest():
+@app.route('/getSensors',  methods=['POST'])
+def getSensors():
 	data = request.data
 	dataDict = json.loads(data)	
 	print type(dataDict), dataDict
 
-	# r = requests.get("http://localhost/cgi-bin/pywps.cgi?service=wps&version=1.0.0&request=execute&identifier=GetSensorData")
-	# print r
-	# print r.content
+	url = "http://localhost/cgi-bin/pywps.cgi?service=wps&version=1.0.0&request=execute&identifier=GetSensors&DataInputs=[feature_names={0};feature_category={1}]".format(dataDict['feature'],dataDict['featureType'])
+	print url
 
-	return json.dumps("response, 200, {'Content-Type': 'text/plain'}")
+	r = requests.get(url)
+	print r
+	root = etree.fromstring(r.content)
+	nsm = root.nsmap
+	sensors = root.find(".//wps:ComplexData",nsm).text
+	print sensors
+	return json.dumps({"sensors": sensors})
 
 
 @app.route('/getGeoJSON',  methods=['POST'])
