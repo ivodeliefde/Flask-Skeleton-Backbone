@@ -27,18 +27,32 @@
                     window.map.removeLayer(layer);
                 }  
             }); 
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "/getGeoJSON",
+                data: JSON.stringify({category: layerInput}),
+                success: function (data) {
+                    window.geojson = L.geoJson(data, {
+                        style: MapView.style(),
+                        onEachFeature: MapView.onEachFeature
+                    }).addTo(window.map);
+
+                },
+                error: function(e,f){
+                    console.log("error ");
+                    console.log(e);
+                    console.log(f);
+                },
+                dataType: "json"
+            });
+
+
             // console.log("add "+layerInput+" layer")
             if (layerInput == 'Municipality'){
-                window.geojson = L.geoJson(municipalities, {
-                    style: MapView.style(),
-                    onEachFeature: MapView.onEachFeature
-                }).addTo(window.map);
                 $("#featureInput").attr('placeholder', "Delft, Rotterdam");
             } else if (layerInput == 'Province'){
-                window.geojson = L.geoJson(provinces, {
-                    style: MapView.style(),
-                    onEachFeature: MapView.onEachFeature
-                }).addTo(window.map);
                 $("#featureInput").attr('placeholder', "Zuid-Holland, Utrecht");
             // } else if (layerInput == 'Landcover'){
             //     window.geojson = L.geoJson(corine, {
@@ -47,22 +61,10 @@
             //     }).addTo(window.map);
             //     $("#featureInput").attr('placeholder', "Zuid-Holland, Utrecht");
             } else if (layerInput == 'Raster 10km2'){
-                window.geojson = L.geoJson(rasterTen, {
-                    style: MapView.style(),
-                    onEachFeature: MapView.onEachFeature
-                }).addTo(window.map);
                 $("#featureInput").attr('placeholder', "10kmE388N310, 10kmE394N315");
             } else if (layerInput == 'Raster 100km2'){
-                window.geojson = L.geoJson(rasterHundred, {
-                    style: MapView.style(),
-                    onEachFeature: MapView.onEachFeature
-                }).addTo(window.map);
                 $("#featureInput").attr('placeholder', "100kmE39N31, 100kmE40N31");
             } else {
-                window.geojson = L.geoJson(municipalities, {
-                    style: MapView.style(),
-                    onEachFeature: MapView.onEachFeature
-                }).addTo(window.map);
                 $("#featureInput").attr('placeholder', "Delft, Rotterdam");
                 // console.log(window.geojson);
             }
