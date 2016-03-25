@@ -162,7 +162,8 @@
           'click button.goHome' : 'goHome',
           'click button.getGraph' : 'getVegaGraph',
           'change select#featureInputType' : 'getGeoJSON',
-          'click button.getForm' : 'getForm'
+          // 'click button.getForm' : 'getForm',
+          'click button.getForm' : 'cleanup'
         },
         formTemplate: _.template($('#formTemplate').html()),
 
@@ -325,7 +326,13 @@
             $("#vis").html(this.formTemplate);
 
             $("#slider").dateRangeSlider();
-        }            
+
+        },
+        cleanup: function(){
+            MapView.loadGeoJSON('Municipality');
+            this.getForm();
+
+        }              
 
     });
 
