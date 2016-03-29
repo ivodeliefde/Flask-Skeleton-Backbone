@@ -28,6 +28,10 @@
                 }  
             }); 
 
+            if (layerInput == undefined){
+                return
+            }
+
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
@@ -160,17 +164,21 @@
         events: {
           'change select#menu' : 'goTo',
           'click button.goHome' : 'goHome',
-          'click button.getGraph' : 'getVegaGraph',
+          'click button.submitForm1' : 'form1',
           'change select#featureInputType' : 'getGeoJSON',
-          // 'click button.getForm' : 'getForm',
-          'click button.getForm' : 'cleanup'
+          // 'click button.getForm' : 'getForm1',
+          'click button.getForm' : 'cleanup',
+          'click button.getGraph' : 'getGraph',
+          'click button.removeMarker' : 'removeMarker'
         },
-        formTemplate: _.template($('#formTemplate').html()),
+        form1Template: _.template($('#form1Template').html()),
+        form2Template: _.template($('#form2Template').html()),
 
         initialize: function() {
+            
             // console.log("start app");
 
-            this.getForm()
+            this.getForm1()
 
             MapView.render();
 
@@ -182,6 +190,7 @@
             }
            
             MapView.loadGeoJSON('Municipality');
+            _.bindAll(this, 'getForm2');
 
             // Create function to remove item from array by value
             Array.prototype.remove = function() {
@@ -205,7 +214,7 @@
             $.scrollTo('#page_1', { duration:800 });
             $('#menu').val('#page_1');
         },
-        getVegaGraph: function(){
+        form1: function(){
             var features = $('#featureInput').val().split("");
             for (i=0;i<features.length;i++){
                 if (features[i] == " "){
@@ -222,12 +231,6 @@
             console.log(featureCategory);
             var obsProperty = "http://dbpedia.org/resource/"+$('#obsProperty').val();
             console.log(obsProperty);
-            var temporalGranularity = $('#tempGranValue').val() +" "+ $('#tempGranUnit').val();
-            console.log(temporalGranularity);
-            var startTime = new Date($('#slider').dateRangeSlider("values").min.setUTCHours(0)).toISOString();
-            console.log(startTime);
-            var endTime = new Date($('#slider').dateRangeSlider("values").max.setUTCHours(0)).toISOString();
-            console.log(endTime);
 
             problems = []
 
@@ -235,10 +238,10 @@
                 $('#featureInput').css('border','2px solid red');
                 problems.push("features");
             }
-            if ($('#tempGranValue').val().length == 0){
-                $('#tempGranValue').css('border','2px solid red');
-                problems.push("temporal granularity value");
-            }
+            // if ($('#tempGranValue').val().length == 0){
+            //     $('#tempGranValue').css('border','2px solid red');
+            //     problems.push("temporal granularity value");
+            // }
             // console.log(problems);
             if (problems.length > 0){
                 errorText = '<h5>Please select '+problems.join(' & ')+'</h5>';
@@ -251,93 +254,24 @@
                 $('#featureInput').attr("disabled", "disabled");
                 $('#featureInputType').attr("disabled", "disabled"); 
                 $('#obsProperty').attr("disabled", "disabled"); 
-                $('#tempGranValue').attr("disabled", "disabled"); 
-                $('#tempGranUnit').attr("disabled", "disabled"); 
-                $('#slider').dateRangeSlider("disable");
+                // $('#tempGranValue').attr("disabled", "disabled"); 
+                // $('#tempGranUnit').attr("disabled", "disabled"); 
+                // $('#slider').dateRangeSlider("disable");
                 // alert("Still under construction.. Sorry!");
-                var data = {
-                    'features' : 'features',
-                    'featureCategory' : 'featureCategory'
-                };
-                console.log(JSON.stringify(data, null, '\t'));
+                input = JSON.stringify({
+                    feature: features, 
+                    featureType: featureCategory, 
+                    // tempRange: startTime+","+endTime
+                })
 
                 $.ajax({
                   type: "POST",
+                  context: this,
                   contentType: "application/json; charset=utf-8",
                   url: "/getSensors",
-                  data: JSON.stringify({feature: features, featureType: featureCategory}),
-                  success: function (data) {
-                    data = JSON.parse(data.sensors)
-                    console.log(data.type);
-                   
-                    function onEachFeature(feature, layer) {
-                        var popupContent = "<div class='row' id='popup'><p><ul><li> URI: " + feature.properties.sensorUri +"</li><li> observedProperty: " + feature.properties.observedProperty[1]  +"</li><li> SOS: " + feature.properties.sos +"</li></ul></p></div>";
-
-                        layer.bindPopup(popupContent);
-                    };
-
-
-                    window.geojsonSensors = L.geoJson(data,{
-                        onEachFeature: onEachFeature,
-                        pointToLayer: function (feature, latlng) {
-                        return L.circleMarker(latlng, {
-                            radius: 8,
-                            fillColor: "#ff7800",
-                            color: "#000",
-                            weight: 1,
-                            opacity: 1,
-                            fillOpacity: 0.8
-                            });
-                        }
-                    }).addTo(window.map);
-                    map.fitBounds(window.geojsonSensors.getBounds());
-
-
-
-
-                    // vlSpec = {
-                    //   "description": "A trellis bar chart showing the US population distribution of age groups and gender in 2000.",
-                    //   "data": { "url": "https://vega.github.io/vega-editor/app/data/population.json"},
-                    //   "transform": {
-                    //     "filter": "datum.year == 2000",
-                    //     "calculate": [{"field": "gender", "expr": "datum.sex == 2 ? \"Female\" : \"Male\""}]
-                    //   },
-                    //   "mark": "bar",
-                    //   "encoding": {
-                    //     "row": {"field": "gender", "type": "nominal"},
-                    //     "y": {
-                    //       "aggregate": "average", "field": "people", "type": "quantitative",
-                    //       "axis": {"title": "population"}
-                    //     },
-                    //     "x": {
-                    //       "field": "age", "type": "ordinal",
-                    //       "scale": {"bandSize": 17}
-                    //     },
-                    //     "color": {
-                    //       "field": "gender", "type": "nominal",
-                    //       "scale": {"range": ["#FFFFFF","#DDDDDD"]}
-                    //     }
-                    //   }
-                    // }
-
-                    // var embedSpec = {
-                    //   mode: "vega-lite",
-                    //   spec: vlSpec
-                    // }
-
-                    // vg.embed("#vis", embedSpec, function(error, result) {
-                    //   // Callback receiving the View instance and parsed Vega spec
-                    //   // result.view is the View, which resides under the '#vis' element
-                    // });
-                    // console.log("add to #vis")
-                    // $('#vis').append("<button class='button-primary getForm'>Back to form</button>")
-                        
-                  },
-                  error: function(e,f){
-                    console.log("error ");
-                    console.log(e);
-                    console.log(f);
-                  },
+                  data: input,
+                  success: this.foundSensors,
+                  error: this.errorLog,
                   dataType: "json"
                 });
 
@@ -358,17 +292,136 @@
 
 
         },
-        getForm: function(){
-            $("#vis").html(this.formTemplate);
+        getForm1: function(){
+            $("#vis").html(this.form1Template);
 
-            $("#slider").dateRangeSlider();
+            // $("#slider").dateRangeSlider();
+
+        },
+        getForm2: function(){
+                $("#vis").html(this.form2Template);
+
+                $("#slider").dateRangeSlider();
 
         },
         cleanup: function(){
             MapView.loadGeoJSON('Municipality');
-            this.getForm();
+            this.getForm1();
 
-        }              
+        },
+        foundSensors: function (data) {
+            data = JSON.parse(data.sensors)
+            console.log(data.type);
+           
+            function onEachFeature(feature, layer) {
+                var popupContent = "<div class='row' id='popup'><table style='width:100%'><tr><td>URI</td><td><a href='"+feature.properties.sensorUri+"' target=_blank>" + feature.properties.sensorUri +"</td></tr><tr><td>Observed property</td><td><a href='" + feature.properties.observedProperty[1]  +"' target=_blank>"+feature.properties.observedProperty[1]+"</td></tr><tr><td>SOS</td><td>" + feature.properties.sos +"</td></tr></table><button class='button-primary removeMarker'>Remove</button></div>";
+
+                layer.bindPopup(popupContent);
+            };
+
+            window.geojsonSensors = L.geoJson(data,{
+                onEachFeature: onEachFeature,
+                pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, {
+                    radius: 8,
+                    fillColor: "#ff7800",
+                    color: "#000",
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                    });
+                }
+            }).addTo(window.map);
+            map.fitBounds(window.geojsonSensors.getBounds());
+            
+            this.getForm2();
+                
+        },
+        errorLog: function(e,f){
+            console.log("error ");
+            console.log(e);
+            console.log(f);
+        },
+
+        getGraph: function(){
+            var temporalGranularity = $('#tempGranValue').val() +" "+ $('#tempGranUnit').val();
+            console.log(temporalGranularity);
+            var tempAggType = $('#temporalAggType').val();
+            console.log("temporal aggregation: "+tempAggType);
+            var spatialAggType = $('#spatialAggType').val();
+            console.log("spatial aggregation: "+spatialAggType);
+            var startTime = new Date($('#slider').dateRangeSlider("values").min.setUTCHours(0)).toISOString();
+            console.log(startTime);
+            var endTime = new Date($('#slider').dateRangeSlider("values").max.setUTCHours(0)).toISOString();
+            console.log(endTime);
+
+            MapView.loadGeoJSON(undefined);
+
+            $('#tempGranValue').attr("disabled", "disabled"); 
+            $('#tempGranUnit').attr("disabled", "disabled");
+            $('#spatialAggType').attr("disabled", "disabled"); 
+            $('#temporalAggType').attr("disabled", "disabled"); 
+ 
+            $('#slider').dateRangeSlider("disable");
+
+            var input = JSON.stringify({
+                    feature: features, 
+                    featureType: featureCategory, 
+                    // tempRange: startTime+","+endTime
+                })
+
+            $.ajax({
+                  type: "POST",
+                  context: this,
+                  contentType: "application/json; charset=utf-8",
+                  url: "/getSensorData",
+                  data: input,
+                  success: this.foundSensors,
+                  error: this.errorLog,
+                  dataType: "json"
+                });
+
+            vlSpec = {
+              "description": "A trellis bar chart showing the US population distribution of age groups and gender in 2000.",
+              "data": { "url": "https://vega.github.io/vega-editor/app/data/population.json"},
+              "transform": {
+                "filter": "datum.year == 2000",
+                "calculate": [{"field": "gender", "expr": "datum.sex == 2 ? \"Female\" : \"Male\""}]
+              },
+              "mark": "bar",
+              "encoding": {
+                "row": {"field": "gender", "type": "nominal"},
+                "y": {
+                  "aggregate": "average", "field": "people", "type": "quantitative",
+                  "axis": {"title": "population"}
+                },
+                "x": {
+                  "field": "age", "type": "ordinal",
+                  "scale": {"bandSize": 17}
+                },
+                "color": {
+                  "field": "gender", "type": "nominal",
+                  "scale": {"range": ["#FFFFFF","#DDDDDD"]}
+                }
+              }
+            }
+
+            var embedSpec = {
+              mode: "vega-lite",
+              spec: vlSpec
+            }
+
+            vg.embed("#vis", embedSpec, function(error, result) {
+              // Callback receiving the View instance and parsed Vega spec
+              // result.view is the View, which resides under the '#vis' element
+            });
+            console.log("add to #vis")
+            $('#vis').append("<button class='button-primary getForm'>Back to form</button>")
+        },
+        removeMarker: function(){
+            console.log("remove marker");
+        }
+
 
     });
 
