@@ -117,10 +117,20 @@ button {
     height: 50vh;
 }
 
-#popup {
+/*#popup, #popup table {
     padding: 1px;
-    /*overflow: auto;*/
+    overflow: auto;
     word-wrap: break-word;
+}
+*/
+
+button.removeMarker:hover {
+    background-color: #C90000;
+}
+
+button.removeMarker, button.removeMarker:active, button.removeMarker:focus, button.removeMarker:target {
+    background-color: #E50000;
+    border: none;
 }
 
 a, a:hover {
