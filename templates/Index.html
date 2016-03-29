@@ -49,21 +49,14 @@
 <!-- Form template -->
 <!-- ============= -->
 
-<script type="text/template" id="formTemplate">
+<script type="text/template" id="form1Template">
 <form>
   <div class="row">
-    <div class="five columns">
+    <div class="twelve columns">
       <label for="featureInput">Features</label>
       <textarea class="u-full-width" placeholder="Delft, Rotterdam" id="featureInput"></textarea>
     </div>
-    <div class="seven columns">
-      <label for="obsProperty">Observed Property</label>
-      <select class="u-full-width" id="obsProperty">
-        <option value="Nitrogen_Dioxide">Nitrogen Dioxide (NO2)</option>
-        <option value="Ozone">Ozone (O3)</option>
-        <option value="Particulates">Particulate Matter (PM10)</option>
-      </select>
-    </div>
+    
   </div>
 
   <div class="row">
@@ -77,41 +70,71 @@
             <option value="Raster 100km2">Raster 100km2</option>
         </select>
       </div>
-     
-      <div class="five columns">
-        <label for="tempGranUnit">Temporal granularity</label>
-        <select class="u-full-width" id="tempGranUnit">
-            <option value="Hours">Hours</option>
-            <option value="Days">Days</option>
-            <option value="Weeks">Weeks</option>
-        </select>
-      </div>
+      <div class="seven columns">
+      <label for="obsProperty">Observed Property</label>
+      <select class="u-full-width" id="obsProperty">
+        <option value="Nitrogen_Dioxide">Nitrogen Dioxide (NO2)</option>
+        <option value="Ozone">Ozone (O3)</option>
+        <option value="Particulates">Particulate Matter (PM10)</option>
+      </select>
+    </div>
+  </div>
 
-       <div class="two columns">
-        <label for="tempGranValue">no.</label>
-        <input class="u-full-width" type="text" placeholder="12" id="tempGranValue">
-      </div>
+</form>
+<div class="row">
+  <button class='button-primary submitForm1'>Send</button>
+</div>
+</script>
+
+<script type="text/template" id="form2Template">
+<form>
+  <div class="row">
+    <div class="six columns">
+      <label for="tempGranUnit">Temporal granularity unit</label>
+      <select class="u-full-width" id="tempGranUnit">
+          <option value="Hours">Hours</option>
+          <option value="Days">Days</option>
+          <option value="Weeks">Weeks</option>
+      </select>
+    </div>
+
+    <div class="six columns">
+      <label for="tempGranValue">Granularity value</label>
+      <input class="u-full-width" type="text" placeholder="12" id="tempGranValue">
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="six columns">
+      <label for="temporalAggType">Temporal Aggregation</label>
+      <select class="u-full-width" id="tempGranUnit">
+          <option value="average">Average</option>
+          <option value="minimum">Minimum</option>
+          <option value="maximum">Maximum</option>
+      </select>
+    </div>
+
+    <div class="six columns">
+      <label for="spatialAggType">Spatial Aggregation</label>
+      <select class="u-full-width" id="tempGranUnit">
+          <option value="average">Average</option>
+          <option value="minimum">Minimum</option>
+          <option value="maximum">Maximum</option>
+      </select>
+    </div>
 
   </div>
 
   <div class="row">
     <label for="slider">temporal range</label>
     <div id="slider"></div>
-
   </div>
-
-      <!-- <label for="exampleMessage">Message</label>
-      <textarea class="u-full-width" placeholder="Hi Dave …" id="exampleMessage"></textarea>
-      <label class="example-send-yourself-copy">
-        <input type="checkbox">
-        <span class="label-body">Send a copy to yourself</span>
-      </label> -->
-      <!-- <input class="button-primary getGraph" type="submit" value="Submit"> -->
-      <!-- <button class='button-primary getGraph'>Send</button> -->
 
 </form>
 <div class="row">
-  <button class='button-primary getGraph'>Send</button>
+  <div class="six columns"><button class='button-primary getForm'>Back</button></div>
+  <div class="six columns"><button class='button-primary getGraph'>Submit</button></div>
+  
 </div>
 </script>
 
