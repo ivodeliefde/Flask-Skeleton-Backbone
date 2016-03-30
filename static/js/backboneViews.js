@@ -231,6 +231,7 @@
 
             console.log(window.featureCategory);
             window.obsProperty = "http://dbpedia.org/resource/"+$('#obsProperty').val();
+            window.observedPropertyShort = $('#obsProperty').val();
             console.log(window.obsProperty);
 
             problems = []
@@ -345,6 +346,9 @@
         getSensorData: function(){
             console.log("Get sensor data");
             window.temporalGranularity = $('#tempGranValue').val() +" "+ $('#tempGranUnit').val();
+            if (String($('#tempGranValue').val()) == "1"){
+                window.temporalGranularity = window.temporalGranularity.slice(0, -1);
+            }
             console.log(window.temporalGranularity);
             window.tempAggType = $('#temporalAggType').val();
             console.log("temporal aggregation: "+window.tempAggType);
@@ -441,35 +445,75 @@
                 }
             }).addTo(window.map);
         },
-        createGraph: function(data){
-            console.log("create graph");
-            console.log(data);
-            var url = data.url;
-            console.log(url);
+        createGraph: function(response){
+            // console.log("create graph");
+            // console.log(data);
+            var sensorData = JSON.parse(response.data);
+            console.log(sensorData);
+            // window.geojsonSensor = L.geoJson(sensorData,{
+                // style: MapView.style()
+                // onEachFeature: this.onEachMarker,
+                // pointToLayer: function (feature, latlng) {
+                // return L.circleMarker(latlng, {
+                    // radius: 8,
+                    // fillColor: "#ff7800",
+                    // color: "#000",
+                    // weight: 1,
+                    // opacity: 1,
+                    // fillOpacity: 0.8
+                    // });
+                // }
+            // }).addTo(window.map);
+            // map.fitBounds(window.geojsonSensors.getBounds());
+            var csvData = [];
+
+            for (var feature in sensorData.features) {    
+                // console.log(feature);
+                // console.log(sensorData.features[feature].properties);
+                if (sensorData.features[feature].properties != undefined) {
+                    // console.log(sensorData.features[feature].properties);
+                    var uom = sensorData.features[feature].properties.uom;
+                    var csvDataArray = sensorData.features[feature].properties.observationDataArray.split(sensorData.features[feature].properties.blockSeparator);
+                    for (i = 0; i < csvDataArray.length; i++){
+                        var row = csvDataArray[i].split(sensorData.features[feature].properties.tokenSeparator);
+                        // row[0] = Date.parse(row[0].split(sensorData.features[feature].properties.decimalSeparator)[0]);
+                        // row[1] = Date.parse(row[1].split(sensorData.features[feature].properties.decimalSeparator)[0]);
+                        var time = row[0].split(sensorData.features[feature].properties.decimalSeparator)[0];
+                        var observation = row[2];
+                        var newRow = {"name": sensorData.features[feature].properties.name, "time": time, "observation": observation};
+                        console.log(newRow);
+                        csvData.push(newRow);
+                    }
+                }
+            }
+            console.log(csvData);
 
             vlSpec = {
-              "description": "A trellis bar chart showing the US population distribution of age groups and gender in 2000.",
-              "data": { "url": "https://vega.github.io/vega-editor/app/data/population.json"},
-              "transform": {
-                "filter": "datum.year == 2000",
-                "calculate": [{"field": "gender", "expr": "datum.sex == 2 ? \"Female\" : \"Male\""}]
-              },
+              "description": window.observedPropertyShort + "observation data per "+window.temporalGranularity.toLowerCase(),
+              "data": { "values": csvData },
               "mark": "bar",
               "encoding": {
-                "row": {"field": "gender", "type": "nominal"},
+                "column": {
+                    "field": "time", 
+                    "type": "nominal", 
+                    "scale": {"padding": 4},
+                    "axis": {"orient": "bottom", "axisWidth": 1, "offset": -8, "labelAngle": 270}
+                },
                 "y": {
-                  "aggregate": "average", "field": "people", "type": "quantitative",
-                  "axis": {"title": "population"}
+                  "aggregate": "average", "field": "observation", "type": "quantitative",
+                  "axis": {"title": window.observedPropertyShort+"Observation ("+uom+") per "+window.temporalGranularity.toLowerCase(), "grid": false}
                 },
                 "x": {
-                  "field": "age", "type": "ordinal",
-                  "scale": {"bandSize": 17}
+                  "field": "name", "type": "nominal",
+                  "scale": {"bandSize": 17},
+                  "axis": false
                 },
                 "color": {
-                  "field": "gender", "type": "nominal",
-                  "scale": {"range": ["#FFFFFF","#DDDDDD"]}
+                  "field": "name", "type": "nominal",
+                  "scale": {"range": ["#7ccdd4","#b09be5", "#30586f", "#c7a744", "#c3ce6e", "#391300", "#ff7025"]}
                 }
-              }
+              },
+              "config": {"facet": {"cell": {"strokeWidth": 0}}}
             }
 
             var embedSpec = {
