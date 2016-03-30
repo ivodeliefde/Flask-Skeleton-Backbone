@@ -124,13 +124,17 @@ button {
 }
 */
 
-button.removeMarker:hover {
+/*button.removeMarker:hover {
     background-color: #C90000;
-}
+}*/
 
-button.removeMarker, button.removeMarker:active, button.removeMarker:focus, button.removeMarker:target {
+/*, button.removeMarker:active, button.removeMarker:focus, button.removeMarker:target*/
+/*button.removeMarker {
     background-color: #E50000;
-    border: none;
+}*/
+
+th {
+    font-weight: 900;
 }
 
 a, a:hover {
