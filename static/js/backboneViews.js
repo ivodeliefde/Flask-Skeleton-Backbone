@@ -361,8 +361,13 @@
 
             if ($('#tempGranValue').val().length == 0){
                 $('#tempGranValue').css('border','2px solid red');
-                problems.push("temporal granularity value");
+                problems.push("a temporal granularity value");
             }
+            if (window.endTime <= window.startTime){
+                $('#slider').css('border','2px solid red');
+                problems.push("a valid temporal range");
+            }
+            // if ()
             console.log(problems);
             if (problems.length > 0){
                 errorText = '<h5>Please select '+problems.join(' & ')+'</h5>';
