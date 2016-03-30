@@ -40,7 +40,7 @@ def getSensors():
 
 @app.route('/getSensorData',  methods=['POST'])
 def getSensorData():
-	print "Get Sensor Data"
+	# print "Get Sensor Data"
 	data = request.data
 	dataDict = json.loads(data)	
 	# print type(dataDict), dataDict
@@ -53,19 +53,18 @@ def getSensorData():
 		f.write(json.dumps(dataDict['sensors']))
 	
 	url = "http://localhost/cgi-bin/pywps.cgi?service=wps&version=1.0.0&request=execute&identifier=GetSensorData&DataInputs=[feature_names={0};feature_category={1};observed_properties={2};temporal_range={3},{4};temporal_granularity={5};temporal_aggregation={6};spatial_aggregation={7};Sensors=http://localhost:5000/{8}]".format(dataDict['feature'],dataDict['featureType'],dataDict['obsProperty'],dataDict['startTime'],dataDict['endTime'],dataDict['tempGran'],dataDict['tempAggType'],dataDict['spatialAggType'], sensorsURL)
+	# url = "http://localhost/cgi-bin/pywps.cgi?service=wps&version=1.0.0&request=execute&identifier=GetSensorData&DataInputs=[feature_names=Antwerpen,Utrecht;feature_category=Municipality;observed_properties=http://dbpedia.org/resource/Nitrogen_dioxide;temporal_range=2016-03-01T00:28:06.771Z,2016-03-10T00:00:00.000Z;temporal_granularity=1 Days;temporal_aggregation=average;spatial_aggregation=average;Sensors=http://localhost:5000/static/uploads/sensors_1.json]"
 	print url
 
 	r = requests.get(url)
-	# print r
+	print "Get Sensor Data: {0}".format(r)
 	# print r.content
 	root = etree.fromstring(r.content)
 	nsm = root.nsmap
 	sensorData = root.find(".//wps:ComplexData",nsm).text
-	print sensorData
+	# print sensorData
 
-	csvDataURL = "www.csvDataURL.com"
-
-	return json.dumps({"url": csvDataURL})
+	return json.dumps({"data": sensorData})
 
 
 
@@ -78,4 +77,4 @@ def getGeoJSON():
 
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run(debug=True, threaded=True)
