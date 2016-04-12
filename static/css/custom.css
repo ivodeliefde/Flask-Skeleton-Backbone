@@ -29,13 +29,9 @@ html, body {
     background-color: #e9ece5;
     /*max-width: 20vw;*/ 
 }
-/*
-#vis {
-    background-color: white;
-    margin-left: -1vw;
-    margin-right: -1vw;
-    padding-left: 1vw;
-    padding-right: 1vw;
+
+/*#vis {
+    overflow: auto;    
 }*/
 
 #vis form {

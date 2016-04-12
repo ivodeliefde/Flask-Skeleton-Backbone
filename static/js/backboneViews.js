@@ -315,7 +315,7 @@
 
         },
         cleanup: function(){
-            $("#vis").css('overflow','none');
+            // $("#vis").css('overflow','none');
             MapView.loadGeoJSON('Municipality');
             this.getForm1();
 
@@ -389,6 +389,7 @@
                 $('#error').html('');
                 $('.getSensorData').html('Loading...');
                 $('button.getSensorData').prop('disabled', true);
+                $('button.getForm').prop('disabled', true);
                 $('#tempGranValue').attr("disabled", "disabled"); 
                 $('#tempGranUnit').attr("disabled", "disabled"); 
                 $('#spatialAggType').attr("disabled", "disabled"); 
@@ -460,79 +461,84 @@
             console.log(sensorData);
             window.csvData = [];
 
-            for (var feature in sensorData.features) {    
-                // console.log(feature);
-                // console.log(sensorData.features[feature].properties);
-                if (sensorData.features[feature].properties != undefined) {
+            if (window.spatialAggType == 'raw'){
+
+            } else {
+                for (var feature in sensorData.features) {    
+                    // console.log(feature);
                     // console.log(sensorData.features[feature].properties);
-                    window.uom = sensorData.features[feature].properties.uom;
-                    console.log("UOM: "+sensorData.features[feature].properties.uom);
-                    var csvDataArray = sensorData.features[feature].properties.observationDataArray.split(sensorData.features[feature].properties.blockSeparator);
-                    for (i = 0; i < csvDataArray.length; i++){
-                        var row = csvDataArray[i].split(sensorData.features[feature].properties.tokenSeparator);
-                        // row[0] = Date.parse(row[0].split(sensorData.features[feature].properties.decimalSeparator)[0]);
-                        // row[1] = Date.parse(row[1].split(sensorData.features[feature].properties.decimalSeparator)[0]);
-                        var time = row[0].split(sensorData.features[feature].properties.decimalSeparator)[0];
-                        var observation = row[2];
-                        var newRow = {"name": sensorData.features[feature].properties.name, "time": time, "observation": observation};
-                        // console.log(newRow);
-                        window.csvData.push(newRow);
+                    if (sensorData.features[feature].properties != undefined) {
+                        // console.log(sensorData.features[feature].properties);
+                        window.uom = sensorData.features[feature].properties.uom;
+                        console.log("UOM: "+sensorData.features[feature].properties.uom);
+                        var csvDataArray = sensorData.features[feature].properties.observationDataArray.split(sensorData.features[feature].properties.blockSeparator);
+                        for (i = 0; i < csvDataArray.length; i++){
+                            var row = csvDataArray[i].split(sensorData.features[feature].properties.tokenSeparator);
+                            // row[0] = Date.parse(row[0].split(sensorData.features[feature].properties.decimalSeparator)[0]);
+                            // row[1] = Date.parse(row[1].split(sensorData.features[feature].properties.decimalSeparator)[0]);
+                            var time = row[0].split(sensorData.features[feature].properties.decimalSeparator)[0];
+                            var observation = row[2];
+                            var newRow = {"name": sensorData.features[feature].properties.name, "time": time, "observation": observation};
+                            // console.log(newRow);
+                            window.csvData.push(newRow);
+                        }
                     }
                 }
-            }
-            console.log(csvData);
+                console.log(csvData);
 
-            vlSpec = {
-              "description": window.observedPropertyShort + "observation data per "+window.temporalGranularity.toLowerCase(),
-              "data": { "values": csvData },
-              "mark": "bar",
-              "encoding": {
-                "column": {
-                    "field": "time", 
-                    "type": "nominal", 
-                    "scale": {"padding": 4},
-                    "axis": {"orient": "bottom", "axisWidth": 1, "offset": -8, "labelAngle": 270}
-                },
-                "y": {
-                  "aggregate": "average", "field": "observation", "type": "quantitative",
-                  "axis": {"title": window.observedPropertyShort+"Observation ("+window.uom+") per "+window.temporalGranularity.toLowerCase(), "grid": false}
-                },
-                "x": {
-                  "field": "name", "type": "nominal",
-                  "scale": {"bandSize": 17},
-                  "axis": false
-                },
-                "color": {
-                  "field": "name", "type": "nominal",
-                  "scale": {"range": [ "#673ab7", "#4caf50", "#3f51b5", "#8bc34a", "#cddc39", "#ffeb3b", "#ffc107", "#ff9800"]}
+                vlSpec = {
+                  "description": window.observedPropertyShort + "observation data per "+window.temporalGranularity.toLowerCase(),
+                  "data": { "values": csvData },
+                  "mark": "bar",
+                  "encoding": {
+                    "column": {
+                        "field": "time", 
+                        "type": "nominal", 
+                        "scale": {"padding": 4},
+                        "axis": {"orient": "bottom", "axisWidth": 1, "offset": -8, "labelAngle": 270}
+                    },
+                    "y": {
+                      "aggregate": "average", "field": "observation", "type": "quantitative",
+                      "axis": {"title": window.observedPropertyShort+"Observation ("+window.uom+") per "+window.temporalGranularity.toLowerCase(), "grid": false}
+                    },
+                    "x": {
+                      "field": "name", "type": "nominal",
+                      "scale": {"bandSize": 17},
+                      "axis": false
+                    },
+                    "color": {
+                      "field": "name", "type": "nominal",
+                      "scale": {"range": [ "#673ab7", "#4caf50", "#8bc34a", "#cddc39", "#ffeb3b", "#ffc107", "#ff9800"]}
+                    }
+                  },
+                  "config": {"facet": {"cell": {"strokeWidth": 0}}}
                 }
-              },
-              "config": {"facet": {"cell": {"strokeWidth": 0}}}
-            }
 
-            var embedSpec = {
-              mode: "vega-lite",
-              spec: vlSpec
-            }
-
-            // $("#vis").css('background-color', 'white');
-
-            // $("#vis").css("-webkit-transform", "rotate(90deg)")
-            // $("#vis").css("-moz-transform", "rotate(90deg)")
-            // $("#vis").css("-o-transform", "rotate(90deg)")
-            // $("#vis").css("-ms-transform", "rotate(90deg)")
-            // $("#vis").css("transform", "rotate(90deg)")
-
-            vg.embed("#vis", embedSpec, function(error, result) {
-              // Callback receiving the View instance and parsed Vega spec
-              // result.view is the View, which resides under the '#vis' element
-                if (error != null){
-                    console.log(error,result);
+                var embedSpec = {
+                  mode: "vega-lite",
+                  spec: vlSpec
                 }
-              
-            });
-            $("#vis").css('overflow','auto');
-            console.log("add to #vis");
+
+                // $("#vis").css('background-color', 'white');
+
+                // $("#vis").css("-webkit-transform", "rotate(90deg)")
+                // $("#vis").css("-moz-transform", "rotate(90deg)")
+                // $("#vis").css("-o-transform", "rotate(90deg)")
+                // $("#vis").css("-ms-transform", "rotate(90deg)")
+                // $("#vis").css("transform", "rotate(90deg)")
+
+                vg.embed("#vis", embedSpec, function(error, result) {
+                  // Callback receiving the View instance and parsed Vega spec
+                  // result.view is the View, which resides under the '#vis' element
+                    if (error != null){
+                        console.log(error,result);
+                    }
+                  
+                });
+                // $("#vis").css('overflow-x','scroll');
+                console.log("add to #vis");
+            };
+            
             $('#visDiv').append("<button class='six columns download'>Download Sensor Data</button>");
             $('#visDiv').append("<button class='button-primary getForm'>Back to form</button>");
             console.log(sensorData);
@@ -575,10 +581,17 @@
         stylePolygon: function(){
             console.log(window.features.split())
             console.log('Number of features: '+window.features.split(",").length);
-            if (window.polygonCount > window.features.split(",").length){
+            var opacity = 0.7;
+            if (window.polygonCount+1 > window.features.split(",").length){
                 var color = "#000000";
+                opacity = 0;
             } else {
-                var color = vlSpec.encoding.color.scale.range[window.polygonCount];
+                if (window.spatialAggType == "raw"){
+                    var color = "#FFEDA0";
+                } else{
+                    var color = vlSpec.encoding.color.scale.range[window.polygonCount];
+                }
+                
             }
             // console.log(vlSpec.encoding.color.scale.range);
             console.log(window.polygonCount);
@@ -589,7 +602,7 @@
                 opacity: 1,
                 color: 'white',
                 dashArray: '3',
-                fillOpacity: 0.7,
+                fillOpacity: opacity,
                 fillColor: color
             } 
         },
