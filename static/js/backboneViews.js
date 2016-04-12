@@ -169,7 +169,8 @@
           // 'click button.getForm' : 'getForm1',
           'click button.getForm' : 'cleanup',
           'click button.getSensorData' : 'getSensorData',
-          'click button.removeMarker' : 'removeMarker'
+          'click button.removeMarker' : 'removeMarker',
+          'click button.download' : 'downloadCSV'
         },
         form1Template: _.template($('#form1Template').html()),
         form2Template: _.template($('#form2Template').html()),
@@ -222,8 +223,13 @@
                     delete features[i];
                 };
             };
+
             window.features = features.join("");
             console.log( window.features );
+
+            // console.log("split: "+window.features.split(",")[0]+"|"+window.features.split(",")[1]+"\nlength: "+window.features.split(",").length)
+
+
             window.featureCategory = $('#featureInputType').val();
             if (window.featureCategory.indexOf("Raster") > -1){
                 window.featureCategory = "raster";
@@ -251,8 +257,9 @@
             } else {
                 console.log("send data");
                 $('#error').html('');
-                $('.getGraph').html('Calculating...');
+                $('.getGraph').html('Loading...');
                 $('button.getGraph').prop('disabled', true);
+                $('button.getForm').prop('disabled', true);
                 $('#featureInput').attr("disabled", "disabled");
                 $('#featureInputType').attr("disabled", "disabled"); 
                 $('#obsProperty').attr("disabled", "disabled"); 
@@ -308,6 +315,7 @@
 
         },
         cleanup: function(){
+            $("#vis").css('overflow','none');
             MapView.loadGeoJSON('Municipality');
             this.getForm1();
 
@@ -332,7 +340,7 @@
                     });
                 }
             }).addTo(window.map);
-            map.fitBounds(window.geojsonSensors.getBounds());
+            window.map.fitBounds(window.geojsonSensors.getBounds());
             
             this.getForm2();
                 
@@ -379,7 +387,7 @@
             } else {
                 console.log("send data");
                 $('#error').html('');
-                $('.getSensorData').html('Calculating...');
+                $('.getSensorData').html('Loading...');
                 $('button.getSensorData').prop('disabled', true);
                 $('#tempGranValue').attr("disabled", "disabled"); 
                 $('#tempGranUnit').attr("disabled", "disabled"); 
@@ -450,29 +458,15 @@
             // console.log(data);
             var sensorData = JSON.parse(response.data);
             console.log(sensorData);
-            // window.geojsonSensor = L.geoJson(sensorData,{
-                // style: MapView.style()
-                // onEachFeature: this.onEachMarker,
-                // pointToLayer: function (feature, latlng) {
-                // return L.circleMarker(latlng, {
-                    // radius: 8,
-                    // fillColor: "#ff7800",
-                    // color: "#000",
-                    // weight: 1,
-                    // opacity: 1,
-                    // fillOpacity: 0.8
-                    // });
-                // }
-            // }).addTo(window.map);
-            // map.fitBounds(window.geojsonSensors.getBounds());
-            var csvData = [];
+            window.csvData = [];
 
             for (var feature in sensorData.features) {    
                 // console.log(feature);
                 // console.log(sensorData.features[feature].properties);
                 if (sensorData.features[feature].properties != undefined) {
                     // console.log(sensorData.features[feature].properties);
-                    var uom = sensorData.features[feature].properties.uom;
+                    window.uom = sensorData.features[feature].properties.uom;
+                    console.log("UOM: "+sensorData.features[feature].properties.uom);
                     var csvDataArray = sensorData.features[feature].properties.observationDataArray.split(sensorData.features[feature].properties.blockSeparator);
                     for (i = 0; i < csvDataArray.length; i++){
                         var row = csvDataArray[i].split(sensorData.features[feature].properties.tokenSeparator);
@@ -481,8 +475,8 @@
                         var time = row[0].split(sensorData.features[feature].properties.decimalSeparator)[0];
                         var observation = row[2];
                         var newRow = {"name": sensorData.features[feature].properties.name, "time": time, "observation": observation};
-                        console.log(newRow);
-                        csvData.push(newRow);
+                        // console.log(newRow);
+                        window.csvData.push(newRow);
                     }
                 }
             }
@@ -501,7 +495,7 @@
                 },
                 "y": {
                   "aggregate": "average", "field": "observation", "type": "quantitative",
-                  "axis": {"title": window.observedPropertyShort+"Observation ("+uom+") per "+window.temporalGranularity.toLowerCase(), "grid": false}
+                  "axis": {"title": window.observedPropertyShort+"Observation ("+window.uom+") per "+window.temporalGranularity.toLowerCase(), "grid": false}
                 },
                 "x": {
                   "field": "name", "type": "nominal",
@@ -510,7 +504,7 @@
                 },
                 "color": {
                   "field": "name", "type": "nominal",
-                  "scale": {"range": ["#7ccdd4","#b09be5", "#30586f", "#c7a744", "#c3ce6e", "#391300", "#ff7025"]}
+                  "scale": {"range": [ "#673ab7", "#4caf50", "#3f51b5", "#8bc34a", "#cddc39", "#ffeb3b", "#ffc107", "#ff9800"]}
                 }
               },
               "config": {"facet": {"cell": {"strokeWidth": 0}}}
@@ -521,20 +515,90 @@
               spec: vlSpec
             }
 
+            // $("#vis").css('background-color', 'white');
+
+            // $("#vis").css("-webkit-transform", "rotate(90deg)")
+            // $("#vis").css("-moz-transform", "rotate(90deg)")
+            // $("#vis").css("-o-transform", "rotate(90deg)")
+            // $("#vis").css("-ms-transform", "rotate(90deg)")
+            // $("#vis").css("transform", "rotate(90deg)")
+
             vg.embed("#vis", embedSpec, function(error, result) {
               // Callback receiving the View instance and parsed Vega spec
               // result.view is the View, which resides under the '#vis' element
-              console.log(error,result);
+                if (error != null){
+                    console.log(error,result);
+                }
+              
             });
+            $("#vis").css('overflow','auto');
             console.log("add to #vis");
-            $('#vis').append("<button class='button-primary getForm'>Back to form</button>");
+            $('#visDiv').append("<button class='six columns download'>Download Sensor Data</button>");
+            $('#visDiv').append("<button class='button-primary getForm'>Back to form</button>");
+            console.log(sensorData);
+            window.polygonCount = 0;
+            window.geojsonSensorData = L.geoJson(sensorData,{
+                style: this.stylePolygon,
+                onEachFeature: this.onEachFeature
+            }).addTo(window.map);
+                // ,{
+                // s?tyle: MapView.style(),
+                // onEachFeature: this.onEachFeature,
+                // pointToLayer: function (feature, latlng) {
+                // return L.circleMarker(latlng, {
+                //     radius: 8,
+                //     fillColor: "#ff7800",
+                //     color: "#000",
+                //     weight: 1,
+                //     opacity: 1,
+                //     fillOpacity: 0.8
+                //     });
+                // }
+            // }
+            // ).addTo(window.map);
+            window.map.fitBounds(window.geojsonSensorData.getBounds());
+
+
         },
         onEachMarker: function(feature, layer) {
-            var popupContent = "<div class='row' id='popup'><table style='width:100%'><tr><th colspan='2'><center><h1>Sensor</h1></center></th></tr><tr><td>URI</td><td><a href='"+feature.properties.sensorUri+"' target=_blank>" + feature.properties.sensorUri +"</td></tr><tr><td>Observed property</td><td><a href='" + feature.properties.observedProperty[1]  +"' target=_blank>"+feature.properties.observedProperty[1]+"</td></tr><tr><td>SOS</td><td><a href='" + feature.properties.sos  +"service=SOS&version=2.0.0&request=GetCapabilities' target=_blank>" + feature.properties.sos +"</a></td></tr></table><button class='removeMarker' name='"+feature.properties.sensorUri+"'>Remove</button></div>";
+            var popupContent = "<div class='row' id='popup'><table><tr><th colspan='2'><center><h1>Sensor</h1></center></th></tr><tr><td>URI</td><td><a href='"+feature.properties.sensorUri+"' target=_blank>" + feature.properties.sensorUri +"</td></tr><tr><td>Observed property</td><td><a href='" + feature.properties.observedProperty[1]  +"' target=_blank>"+feature.properties.observedProperty[1]+"</td></tr><tr><td>SOS</td><td><a href='" + feature.properties.sos  +"service=SOS&version=2.0.0&request=GetCapabilities' target=_blank>" + feature.properties.sos +"</a></td></tr></table><button class='removeMarker' name='"+feature.properties.sensorUri+"'>Remove</button></div>";
 
             layer.bindPopup(popupContent);
-        }
+        }, 
+        onEachFeature: function(feature, layer) {
+            layer.on({
+                mouseover: function(){console.log("mouseover");},
+                mouseout: function(){console.log("mouseout");}
 
+            });
+        },
+        stylePolygon: function(){
+            console.log(window.features.split())
+            console.log('Number of features: '+window.features.split(",").length);
+            if (window.polygonCount > window.features.split(",").length){
+                var color = "#000000";
+            } else {
+                var color = vlSpec.encoding.color.scale.range[window.polygonCount];
+            }
+            // console.log(vlSpec.encoding.color.scale.range);
+            console.log(window.polygonCount);
+            console.log(color);
+            window.polygonCount++;
+            return {
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7,
+                fillColor: color
+            } 
+        },
+        downloadCSV: function(){
+            var dl = document.createElement('a');
+            dl.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent( JSON.stringify(window.csvData) ));
+            dl.setAttribute('download', 'sensordata.json');
+            dl.click();
+        }
 
     });
 
