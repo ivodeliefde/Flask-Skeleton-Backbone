@@ -102,13 +102,15 @@ function embed(el, opt, callback) {
         // add 'Export' action
         if (actions.export !== false) {
           var ext = (renderer==='canvas' ? 'png' : 'svg');
-          ctrl.append('a')
+          ctrl.append('button')
             .text('Export as ' + ext.toUpperCase())
-            .attr('href', '#')
-            .attr('target', '_blank')
+            .attr('class', 'download')
+            // .attr('href', '#')
+            // .attr('target', '_blank')
             .attr('download', (spec.name || 'vega') + '.' + ext)
             .on('mousedown', function() {
-              this.href = view.toImageURL(ext);
+              // this.href = view.toImageURL(ext);
+              window.open(view.toImageURL(ext), '_blank'); 
               d3.event.preventDefault();
             });
         }
