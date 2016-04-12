@@ -63,8 +63,12 @@ textarea {
     resize: vertical;
 }
 
-h1 {
+h1, h2, h3 {
     color: black;
+}
+
+#researchQuestion {
+    text-align: center;
 }
 
 h5 {
@@ -117,12 +121,21 @@ button {
     height: 50vh;
 }
 
-/*#popup, #popup table {
+#popup /*, #popup table*/ {
     padding: 1px;
-    overflow: auto;
-    word-wrap: break-word;
+    /*width: auto;*/
+    /*overflow: auto;*/
+    /*word-wrap: break-word;*/
+    
+    table-layout: fixed;
+    box-sizing: border-box;
 }
-*/
+
+#popup table tr td a {
+    word-break: break-all;
+}
+
+
 
 /*button.removeMarker:hover {
     background-color: #C90000;
