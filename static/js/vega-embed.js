@@ -104,7 +104,7 @@ function embed(el, opt, callback) {
           var ext = (renderer==='canvas' ? 'png' : 'svg');
           ctrl.append('button')
             .text('Export as ' + ext.toUpperCase())
-            .attr('class', 'download')
+            .attr('class', 'six columns')
             // .attr('href', '#')
             // .attr('target', '_blank')
             .attr('download', (spec.name || 'vega') + '.' + ext)
