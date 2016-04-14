@@ -209,10 +209,10 @@
         
         goTo: function(){
             this.input = this.$('#menu');
-            $.scrollTo(this.input.val(), { duration:800 });
+            $.scrollTo(this.input.val(), { duration: 1 });
         },
         goHome: function(){
-            $.scrollTo('#page_1', { duration:800 });
+            $.scrollTo('#page_1', { duration: 1 });
             $('#menu').val('#page_1');
         },
         form1: function(){
@@ -316,6 +316,8 @@
         },
         cleanup: function(){
             // $("#vis").css('overflow','none');
+            window.info.removeFrom(window.map);
+            $("#visDiv").html('<div id="vis"><!-- Form / graphs go here --></div>');
             MapView.loadGeoJSON('Municipality');
             this.getForm1();
 
@@ -487,7 +489,7 @@
                 console.log(csvData);
 
                 vlSpec = {
-                  "description": window.observedPropertyShort + "observation data per "+window.temporalGranularity.toLowerCase(),
+                  "description": window.observedPropertyShort + "observation data" ,
                   "data": { "values": csvData },
                   "mark": "bar",
                   "encoding": {
@@ -495,11 +497,11 @@
                         "field": "time", 
                         "type": "nominal", 
                         "scale": {"padding": 4},
-                        "axis": {"orient": "bottom", "axisWidth": 1, "offset": -8, "labelAngle": 270}
+                        "axis": {"title": "Time (per "+window.temporalGranularity.toLowerCase()+")", "orient": "bottom", "axisWidth": 1, "offset": -8, "labelAngle": 270}
                     },
                     "y": {
                       "aggregate": "average", "field": "observation", "type": "quantitative",
-                      "axis": {"title": window.observedPropertyShort+"Observation ("+window.uom+") per "+window.temporalGranularity.toLowerCase(), "grid": false}
+                      "axis": {"title": window.observedPropertyShort.replace('_', ' ')+" ("+window.uom+")", "grid": true}
                     },
                     "x": {
                       "field": "name", "type": "nominal",
@@ -562,6 +564,23 @@
                 // }
             // }
             // ).addTo(window.map);
+
+            window.info = L.control();
+
+            window.info.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+
+            window.info.update = function (props) {
+                this._div.innerHTML =  (props ?
+                    '<h4 id="featureName">' + props.name + '</h4>'
+                    : '<h4 id="featureName">Select a feature</h4>');
+            };
+
+            window.info.addTo(window.map);
+
             window.map.fitBounds(window.geojsonSensorData.getBounds());
 
 
@@ -573,29 +592,37 @@
         }, 
         onEachFeature: function(feature, layer) {
             layer.on({
-                mouseover: function(){console.log("mouseover");},
-                mouseout: function(){console.log("mouseout");}
+                mouseover: function(e){
+                    // console.log(feature.properties.name);
+                    window.info.update(feature.properties);
+                },
+                mouseout: function(e){
+                    // console.log("mouseout");
+                    window.info.update();
+                }
 
             });
         },
         stylePolygon: function(){
-            console.log(window.features.split())
-            console.log('Number of features: '+window.features.split(",").length);
+            // console.log(window.features.split())
+            // console.log('Number of features: '+window.features.split(",").length);
             var opacity = 0.7;
+            var color = '#FFEDA0';
             if (window.polygonCount+1 > window.features.split(",").length){
-                var color = "#000000";
+                // var color = "#000000";
                 opacity = 0;
-            } else {
-                if (window.spatialAggType == "raw"){
-                    var color = "#FFEDA0";
-                } else{
-                    var color = vlSpec.encoding.color.scale.range[window.polygonCount];
-                }
+            } 
+            // else {
+            //     if (window.spatialAggType == "raw"){
+            //         var color = "#FFEDA0";
+            //     } else{
+            //         var color = vlSpec.encoding.color.scale.range[window.polygonCount];
+            //     }
                 
-            }
+            // }
             // console.log(vlSpec.encoding.color.scale.range);
-            console.log(window.polygonCount);
-            console.log(color);
+            // console.log(window.polygonCount);
+            // console.log(color);
             window.polygonCount++;
             return {
                 weight: 2,
@@ -607,9 +634,12 @@
             } 
         },
         downloadCSV: function(){
+            console.log('download sensor data');
             var dl = document.createElement('a');
-            dl.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent( JSON.stringify(window.csvData) ));
+            dl.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent( JSON.stringify(window.csvData), null, 4 ));
             dl.setAttribute('download', 'sensordata.json');
+            dl.style.display = 'none';
+            document.body.appendChild(dl);
             dl.click();
         }
 

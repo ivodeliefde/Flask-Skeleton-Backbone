@@ -45,6 +45,13 @@ html, body {
     color:black;
 }
 
+#featureName {
+    padding: 0.5vw;
+    background-color: white;
+    /*min-width: 5vw; */
+    border-radius: 0.2em;
+}
+
 #error h5 {
     /*background-color: ;*/
     color: black;
