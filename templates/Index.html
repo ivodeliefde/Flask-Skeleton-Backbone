@@ -5,7 +5,7 @@
 <!-- Basic Page Needs
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <meta charset="utf-8">
-<title>Discovering and Processing Sensor Data</title>
+<title>Exploring the use of the semantic web for discovering, retrieving and processing data from Sensor Observation Services</title>
 <meta name="description" content="Thesis by Ivo de Liefde at Geomatics TU Delft."> <meta name="author" content="Ivo de Liefde">
 
 <!-- Mobile Specific Metas
@@ -49,14 +49,14 @@
 <!-- Form template -->
 <!-- ============= -->
 
-<script type="text/template" id="form1Template">
+<!-- <script type="text/template" id="form1Template">
 <form>
   <div class="row">
     <div class="twelve columns">
       <label for="featureInput">Features</label>
       <textarea class="u-full-width" placeholder="Delft, Rotterdam" id="featureInput"></textarea>
     </div>
-    
+
   </div>
 
   <div class="row">
@@ -65,7 +65,7 @@
         <select class="u-full-width" id="featureInputType">
             <option value="Municipality">Municipality</option>
             <option value="Province">Province</option>
-            <!-- <option value="Landcover">Land cover</option> -->
+            <!-- <option value="Landcover">Land cover</option> --><!--
             <option value="Raster 10km2">Raster 10km2</option>
             <option value="Raster 100km2">Raster 100km2</option>
         </select>
@@ -110,8 +110,8 @@
       <select class="u-full-width" id="temporalAggType">
           <option value="average">Average</option>
           <option value="minimum">Minimum</option>
-          <option value="maximum">Maximum</option>
-          <!-- <option value="raw">Raw data</option> -->
+          <option value="maximum">Maximum</option>-->
+          <!-- <option value="raw">Raw data</option> --><!--
       </select>
     </div>
 
@@ -132,13 +132,13 @@
     <div id="slider"></div>
   </div>
 
-</form>
+</form></script>
 <div class="row">
   <div class="six columns"><button class='button-primary getForm'>Back</button></div>
   <div class="six columns"><button class='button-primary getSensorData'>Submit</button></div>
-  
+
 </div>
-</script>
+</script> -->
 
 
 <!-- ========= -->
@@ -149,51 +149,53 @@
 <div id="page_1" class="container">
     <div class='row header' style="padding-top: 1vh;">
         <div class='nine columns'>
-            <h2>Discovering and processing data from Sensor Observation Services</h2>
+            <h3>Exploring the Use of the Semantic Web for discovering, retrieving and processing data from Sensor Observation Services</h3>
         </div>
         <div id="menuContainer" class='three columns'>
             <select id="menu" class="u-full-width">
                 <option value="#page_1">Home</option>
-                <option value="#page_2">Implementation</option>
+                <option value="#page_2">Download</option>
                 <option value="#page_3">Methods</option>
                 <option value="#page_4">Contact</option>
             </select>
         </div>
     </div>
     <div class="row content">
-        <div class="twelve columns">
+        <div class="eleven columns">
           <h5>Master Thesis by Ivo de Liefde</h5>
-          <!-- As sensors get increasingly cheaper more and more sensor data is being produced. Research on smart cities has shown numerous potential applications for using sensor data to create smarter cities with a better quality of life. However, to make the most out of the smart city it should be possible to easily retrieve aggregated sensor data from heterogeneous sources. --> <!-- Also there should be a central place in the internet to discover sensor data. --> <!-- <br><br> -->
-          <!-- This thesis aims to create such a central place in the internet by developing a method to automatically link sensor metadata to OpenStreetMap. This allows for the fusion of sensor data: integrating, combining and aggregating data from different sources. To do so the metadata of all the available sensors should be linked to the semantic definition of the real world objects they're measuring: a street, a neighbourhood, a city, etc.. This way you can get sensor information by simply querying things like: <em>"select all temperature data of the last two days from sensors located in a specific city aggregated per hour"</em>. -->
-          <!-- <br> -->
-          <!-- <br> -->
-          This thesis is called <i>Exploring the Use of the Semantic Web for discovering and processing data from Sensor Observation Services</i> and tries to answer the following research question:
+          Developments such as smart cities, the IoT and INSPIRE are producing a growing amount of observation data. The OGC has developed SWE standards for modelling and publishing this data online. However, their use is currently limited to geo information specialists, who have knowledge about which data services are available and how to access them. With the use of the semantic web, online processes can automatically find and understand observation metadata. This opens up the SWE services to a large user audience. Therefore, this thesis has designed a conceptual system architecture that uses the semantic web to improve sensor data discovery as well as the integration and aggregation of sensor data from multiple sources.
+          <br>
+          <br>
+          This thesis is called <i>Exploring the Use of the Semantic Web for discovering, retrieving and processing data from Sensor Observation Services</i> and tries to answer the following research question:
           <ul id="researchQuestion"><li>To what extent can the semantic web improve the discovery, integration and aggregation of distributed sensor data?</li></ul>
         </div>
+        <div class="one columns"></div>
     </div>
 </div>
 
 <div id="page_2" class="container">
     <div class='row header'>
         <div class='ten columns'>
-            <h1>Implementation</h1>
+            <h1>Download</h1>
         </div>
         <div class='two columns' id="homeButton">
             <button class='u-pull-right goHome'>Home</button>
         </div>
     </div>
     <div class="row content">
-        <div id="map" class="twelve columns"></div>
+        <div class="twelve columns">
+            <iframe src="{{ url_for('static', filename='pdf/thesis.pdf') }}" style="width:100%; height:70vh;" frameborder="0"></iframe>
+            <a href="{{ url_for('static', filename='pdf/thesis.pdf') }}"><h5>Click here to download the thesis</h5></a>
+        </div>
+    <!--     <div id="map" class="twelve columns"></div>
     </div>
     <div class="row content">
         <div id="visDiv">
-            <div id="vis">          
-            <!-- Form / graphs go here -->
+            <div id="vis">
             </div>
         </div>
         <div id="error" class="twelve columns">
-            <!-- Error messages go here -->
-        </div>
+        </div>-->
     </div>
 </div>
 <div id="page_3" class="container">
@@ -231,7 +233,7 @@
         <div class="eight columns" style="padding-top:1vh">
             <h5> Ivo de Liefde</h5>
             <ul>
-                <li>Student MSc. Geomatics for the Built Environment</li>
+                <li>MSc. Geomatics for the Built Environment</li>
                 <li>BSc. Human Geography and Urban Planning</li>
                 <li>Email: i.deliefde@student.tudelft.nl</li>
             </ul>

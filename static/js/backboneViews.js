@@ -608,10 +608,10 @@
             // console.log('Number of features: '+window.features.split(",").length);
             var opacity = 0.7;
             var color = '#FFEDA0';
-            if (window.polygonCount+1 > window.features.split(",").length){
-                // var color = "#000000";
-                opacity = 0;
-            } 
+            // if (window.polygonCount+1 > window.features.split(",").length){
+            //     // var color = "#000000";
+            //     opacity = 0;
+            // } 
             // else {
             //     if (window.spatialAggType == "raw"){
             //         var color = "#FFEDA0";
